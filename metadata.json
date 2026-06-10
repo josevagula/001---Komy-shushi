@@ -1,0 +1,6 @@
+{
+  "name": "Komy Sushi",
+  "description": "Cardápio digital moderno e interativo para o Komy Sushi com personalização de itens, carrinho e fechamento de pedido via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
