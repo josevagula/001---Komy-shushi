@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig(() => {
-retornar {
-  base: '/',
+exportar padrão defineConfig(() => {
+  return {
+    base:'/',
   plugins:[reagir(), tailwindcss()],
     resolve: {
       alias: {
