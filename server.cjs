@@ -55,20 +55,20 @@ async function startServer() {
     try {
       const ai = getGeminiClient();
       if (!ai) {
-        let textResponse = "Ol\xE1! Sou o Chef Assistente da casa no Komy Shusi. No momento estou finalizando o preparo de alguns pratos na cozinha f\xEDsica (chave da API n\xE3o configurada), mas com certeza adoraria sugerir o nosso **Hot Roll Nobre (10 unidades)** ou qualquer um de nossos divinos **Temakis Grelhados**! Se preferir, nosso **Combo Samurai (32 Pe\xE7as)** est\xE1 com uma oferta fant\xE1stica! Qual desses faz mais seu estilo hoje?";
+        let textResponse = "Ol\xE1! Sou o Chef Assistente da casa no Komy Sushi. No momento estou finalizando o preparo de alguns pratos na cozinha f\xEDsica (chave da API n\xE3o configurada), mas com certeza adoraria sugerir o nosso **Hot Roll Premium (8 unidades)** ou qualquer um de nossos divinos **Temakis**! Se preferir, nosso **Combinado 1 (35 pe\xE7as)** est\xE1 com uma oferta fant\xE1stica! Qual desses faz mais seu estilo hoje?";
         const q = prompt.toLowerCase();
-        if (q.includes("combo") || q.includes("casal") || q.includes("fam\xEDlia")) {
-          textResponse = "Para quem busca custo-benef\xEDcio e sabor em dobro, nosso **Combo Samurai (32 Pe\xE7as)** \xE9 imbat\xEDvel! De R$ 139,90 por apenas **R$ 119,90**! Uma grande economia de pe\xE7as frescas. Quer adicionar ao carrinho?";
-        } else if (q.includes("sushi") || q.includes("japa") || q.includes("peixe") || q.includes("combinado")) {
-          textResponse = "Excelente escolha de culin\xE1ria japonesa! Nosso campe\xE3o de pedidos \xE9 o **Hot Roll Cream Cheese (10 unidades)** por apenas **R$ 28,00**. Se estiver em grupo, o **Combo Samurai Sushi Core (32 pe\xE7as)** por **R$ 119,90** oferece sashimis ma\xE7aricados fresqu\xEDssimos, hot rolls super crocantes e uramakis que derretem na boca. Que tal provar hoje?";
-        } else if (q.includes("pizza") || q.includes("massa")) {
-          textResponse = "Trabalhamos com farinha italiana especial e fermenta\xE7\xE3o natural de 48h! A nossa **Marguerita Suprema (R$ 68,00)** leva queijo de b\xFAfala, parmes\xE3o ralado na hora e azeite trufado. J\xE1 a **Di\xE1volo Pepperoni (R$ 65,00)** \xE9 perfeita para quem adora um sabor marcante e leve pic\xE2ncia! Gostaria de acrescentar borda recheada com catupiry original?";
-        } else if (q.includes("doce") || q.includes("sobremesa") || q.includes("banoffee") || q.includes("petit")) {
-          textResponse = "Deixe um espa\xE7o para o final feliz! O nosso **Petit Gateau de Chocolate Belga (R$ 29,90)** escorre aquela calda quente dos deuses e acompanha sorvete artesanal de creme da marca. Mas se voc\xEA gosta de algo menos doce, a **Banoffee Cl\xE1ssica (R$ 22,00 a fatia)** com bananas frescas e chantilly leve \xE9 um verdadeiro espet\xE1culo da confeitaria.";
-        } else if (q.includes("bebida") || q.includes("refrigerante") || q.includes("cerveja") || q.includes("suco")) {
-          textResponse = "Para acompanhar, temos desde a cl\xE1ssica lata de **Coca-Cola trincando (R$ 6,50)** at\xE9 o nosso refrescante **Suco de Amora com Lim\xE3o Natural (R$ 13,90)** batido na hora. E para brindar, uma **Heineken gelada Long Neck** por R$ 11,00 \xE9 a pedida perfeita!";
-        } else if (q.includes("vegetariano") || q.includes("vegano") || q.includes("carne")) {
-          textResponse = "Com certeza! Para os amantes de uma excelente op\xE7\xE3o vegetariana, criamos o **Veggie Trufado (R$ 39,00)**: um blend macio de gr\xE3o-de-bico com r\xFAcula baby, tomates secos artesanais e uma maionese trufada espetacular no p\xE3o australiano. \xC9 um dos preferidos inclusive de n\xE3o-vegetarianos!";
+        if (q.includes("combo") || q.includes("combinado") || q.includes("fam\xEDlia")) {
+          textResponse = "Para quem busca custo-benef\xEDcio e sabor em dobro, nosso **Combinado 1 (35 Pe\xE7as)** \xE9 imbat\xEDvel por apenas **R$ 76,99**! Uma grande sele\xE7\xE3o de pe\xE7as frescas. Quer adicionar ao carrinho?";
+        } else if (q.includes("sushi") || q.includes("japa") || q.includes("peixe") || q.includes("hot")) {
+          textResponse = "Excelente escolha de culin\xE1ria japonesa! Nosso campe\xE3o de pedidos \xE9 o **Hot Roll Premium (8 unidades)** por apenas **R$ 36,99**. Se estiver em grupo, o **Combinado 2 (35 pe\xE7as)** por **R$ 79,99** oferece sashimis fresqu\xEDssimos, hot rolls super crocantes e uramakis que derretem na boca. Que tal provar hoje?";
+        } else if (q.includes("poke") || q.includes("bowl")) {
+          textResponse = "Nossos Pokes s\xE3o sensacionais! O **Poke Salm\xE3o Grelhado (R$ 47,99)** e o **Poke Salm\xE3o em Cubos (R$ 44,99)** s\xE3o os mais pedidos. Ambos vem com arroz, cream cheese, sunomono, couve crispy e muito mais!";
+        } else if (q.includes("doce") || q.includes("sobremesa") || q.includes("ichigo")) {
+          textResponse = "Deixe um espa\xE7o para o final feliz! O nosso **Ichigo (8 unidades - R$ 33,99)** \xE9 uma sobremesa incr\xEDvel com goiabada, cream cheese, morango e leite condensado. Perfeito para ado\xE7ar seu pedido!";
+        } else if (q.includes("bebida") || q.includes("refrigerante") || q.includes("suco")) {
+          textResponse = "Para acompanhar, temos desde a cl\xE1ssica **Coca-Cola gelada (R$ 6,00)** at\xE9 o nosso refrescante **Suco Summer Orange (R$ 10,00)** natural. A combina\xE7\xE3o perfeita para seu sushi!";
+        } else if (q.includes("burger") || q.includes("komy")) {
+          textResponse = "O **Burger Komy** \xE9 uma experi\xEAncia \xFAnica! Arroz prensado com salm\xE3o grelhado (R$ 46,99) ou em cubos (R$ 41,99), ambos com cream cheese, cebola roxa e mussarela. Simplesmente imperd\xEDvel!";
         }
         return res.json({ text: textResponse });
       }
@@ -77,7 +77,7 @@ async function startServer() {
         parts: [{ text: m.text }]
       }));
       const menuString = JSON.stringify(currentMenu || []);
-      const systemInstruction = `Voc\xEA \xE9 o Chef Sommelier e mestre-cuca virtual do 'Komy Shusi', um maravilhoso e tradicional restaurante de sushi delivery.
+      const systemInstruction = `Voc\xEA \xE9 o Chef Sommelier e mestre-cuca virtual do 'Komy Sushi', um maravilhoso e tradicional restaurante de sushi delivery.
 Seu papel \xE9 responder com simpatia, eleg\xE2ncia e entusiasmo culin\xE1rio.
 Use o card\xE1pio oficial a seguir para suas recomenda\xE7\xF5es detalhadas:
 
