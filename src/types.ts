@@ -29,7 +29,7 @@ export interface Product {
   description: string;
   price: number;
   promoPrice?: number;
-  category: string;
+  categories: string[];
   image: string;
   rating: number;
   prepTime: string; // e.g., "15-25 min"

@@ -51,15 +51,15 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
     text += `*TOTAL A PAGAR: R$ ${order.total.toFixed(2).replace('.', ',')}*${line}`;
     text += `${divider}${line}${line}`;
 
-    text += `🛵 *DESTINO:*${line}`;
+    text += `🛵 *MEIO DE ENTREGA:*${line}`;
     if (order.deliveryType === 'delivery' && order.deliveryAddress) {
       const addr = order.deliveryAddress;
+      text += `Delivery${line}`;
       text += `Endereço: ${addr.street}, nº ${addr.number}${line}`;
       if (addr.complement) text += `Complemento: ${addr.complement}${line}`;
       text += `Bairro: ${addr.neighborhood}${line}`;
     } else {
-      text += `Retirada no Balcão 🚶${line}`;
-      text += `Endereço Lozalização: Av. Paulista, 1000 - Bela Vista, São Paulo/SP${line}`;
+      text += `Retirada no Local — Rua América, Bairro Centro, Califórnia - PR, 86820-000${line}`;
     }
     text += `${divider}${line}${line}`;
 
@@ -97,9 +97,9 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
         <div className="w-18 h-18 bg-emerald-500/10 text-emerald-600 rounded-full flex items-center justify-center shadow-md border border-emerald-500/20">
           <CheckCircle2 className="w-10 h-10 fill-emerald-500/10 animate-bounce" />
         </div>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">Pedido Recebido com Sucesso!</h2>
+        <h2 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">Pedido feito com Sucesso!</h2>
         <p className="text-xs text-zinc-500 max-w-xs leading-relaxed">
-          Seu pedido foi registrado em nosso restaurante e começará a ser preparado assim que for verificado!
+          Agora envie o seu pedido para o nosso WhatsApp para começarmos a preparar!
         </p>
       </div>
 
@@ -146,11 +146,25 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
             <span className="text-zinc-500">CLIENTE:</span>
             <span className="font-bold truncate text-right max-w-[160px]">{order.customer.name}</span>
           </div>
+          <div className="flex justify-between items-start">
+            <span className="text-zinc-500 shrink-0">ENTREGA:</span>
+            <span className="font-semibold text-right max-w-[200px] text-[11px]">
+              {order.deliveryType === 'delivery' ? 'Delivery' : 'Retirada no Local'}
+            </span>
+          </div>
           {order.deliveryType === 'delivery' && order.deliveryAddress && (
             <div className="flex justify-between items-start">
-              <span className="text-zinc-500 shrink-0">DESTINO:</span>
+              <span className="text-zinc-500 shrink-0">ENDEREÇO:</span>
               <span className="font-semibold text-right max-w-[200px] text-[11px] truncate">
                 {order.deliveryAddress.street}, {order.deliveryAddress.number}
+              </span>
+            </div>
+          )}
+          {order.deliveryType === 'pickup' && (
+            <div className="flex justify-between items-start">
+              <span className="text-zinc-500 shrink-0">RETIRADA:</span>
+              <span className="font-semibold text-right max-w-[200px] text-[11px]">
+                Rua América, Bairro Centro, Califórnia - PR, 86820-000
               </span>
             </div>
           )}

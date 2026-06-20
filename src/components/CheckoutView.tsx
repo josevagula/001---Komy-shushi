@@ -244,7 +244,7 @@ export default function CheckoutView({
 
             {/* Delivery Type Selector */}
             <div>
-              <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200 uppercase tracking-wide mb-3">Tipo de Retirada</h4>
+              <h4 className="font-bold text-sm text-zinc-800 dark:text-zinc-200 uppercase tracking-wide mb-3">Meio de Entrega</h4>
               <div className="flex gap-3">
                 <button
                   type="button"
@@ -354,8 +354,9 @@ export default function CheckoutView({
             )}
 
             {deliveryType === 'pickup' && (
-              <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 text-center">
+              <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 text-center space-y-1">
                 <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">📍 Retirada no Local</p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">Rua América, Bairro Centro, Califórnia - PR, 86820-000</p>
                 <p className="text-xs text-zinc-500 mt-1">Seu pedido estará pronto para retirada no balcão. Enviaremos um WhatsApp quando estiver pronto!</p>
               </div>
             )}
@@ -515,14 +516,16 @@ export default function CheckoutView({
                 </div>
 
                 <div className="p-3.5 bg-zinc-50 dark:bg-zinc-850 border border-zinc-105 dark:border-zinc-800/80 rounded-2xl">
-                  <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block mb-1">Forma de Envio</span>
+                  <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block mb-1">Meio de Entrega</span>
                   <p className="text-sm font-extrabold text-zinc-850 dark:text-zinc-200 font-black text-amber-600 dark:text-amber-400">
                     {deliveryType === 'delivery' ? '🚗 Delivery' : '🚶 Retirada no Local'}
                   </p>
-                  {deliveryType === 'delivery' && (
+                  {deliveryType === 'delivery' ? (
                     <p className="text-xs text-zinc-500 truncate mt-0.5" title={`${address.street}, ${address.number} - ${address.neighborhood}`}>
                       {address.street}, {address.number} {address.complement && `(${address.complement})`} - {address.neighborhood}
                     </p>
+                  ) : (
+                    <p className="text-xs text-zinc-500 mt-0.5">Rua América, Bairro Centro, Califórnia - PR, 86820-000</p>
                   )}
                 </div>
 

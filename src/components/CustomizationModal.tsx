@@ -142,7 +142,7 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
           
           <div className="absolute bottom-4 left-4 right-4">
             <span className="text-amber-400 font-bold text-xs tracking-wider uppercase bg-amber-500/10 backdrop-blur-md px-2.5 py-1 rounded-md border border-amber-500/20">
-              {product.category}
+              {product.categories?.[0] || ''}
             </span>
             <h3 className="text-white font-extrabold text-xl mt-1.5 leading-tight">{product.name}</h3>
             <p className="text-zinc-300 text-xs mt-0.5 line-clamp-1">{product.description}</p>

@@ -31,13 +31,25 @@ export default function App() {
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('komy-sushi-products');
     const loaded = saved ? JSON.parse(saved) : initialProducts;
-    return loaded.map((p: Product) => {
-      const catLower = p.category.toLowerCase();
-      if (catLower === 'êxodo' || catLower === 'exodo' || catLower === 'bebidas') {
-        return { ...p, category: 'BEBIDAS' };
+    const migrated = loaded.map((p: any) => {
+      if (p.categories) {
+        return p as Product;
+      }
+      if (p.category) {
+        const catLower = p.category.toLowerCase();
+        const catMap: Record<string, string[]> = {
+          'promoções': ['Destaques'],
+          'promocoes': ['Destaques'],
+          'sushis': ['Sushis'],
+          'bebidas': ['Bebidas'],
+          'êxodo': ['Bebidas'],
+          'exodo': ['Bebidas'],
+        };
+        return { ...p, categories: catMap[catLower] || [p.category], category: undefined };
       }
       return p;
     });
+    return migrated;
   });
 
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
@@ -67,7 +79,7 @@ export default function App() {
   // Navigation and UI control states
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [editingCartItem, setEditingCartItem] = useState<CartItem | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>('Promoções');
+  const [activeCategory, setActiveCategory] = useState<string>('Destaques');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
 
@@ -78,10 +90,9 @@ export default function App() {
 
   // Persistence hooks
   useEffect(() => {
-    const validCategorySet = new Set(['promoções', 'promocoes', 'sushis', 'bebidas']);
+    const validCategorySet = new Set(['destaques', 'entradas', 'hots', 'salmão', 'salmao', 'temaki', 'sushis', 'combos', 'pokes', 'especiais', 'bebidas']);
     const hasStaleCategories = products.some(p => {
-      const cat = p.category.toLowerCase();
-      return !validCategorySet.has(cat);
+      return !p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()));
     });
     const hasOutdatedImages = products.some(p => {
       const initial = initialProducts.find(ip => ip.id === p.id);
@@ -149,10 +160,31 @@ export default function App() {
 
   // Categories list based on our product data
   const categoriesList = [
-    { name: 'Promoções', icon: '⭐', description: 'Nossas ofertas irresistíveis e combinados especiais com preço promocional' },
-    { name: 'Sushis', icon: '🍣', description: 'Niguiris, temakis, sashimis, combos, combinados, pokes e burgers premium' },
-    { name: 'BEBIDAS', icon: '🥤', description: 'Refrigerantes e sucos naturais super gelados' }
+    { name: 'Destaques', icon: '⭐', description: 'Os itens mais pedidos e favoritos do nosso cardápio' },
+    { name: 'Entradas', icon: '🥗', description: 'Entradas leves e refrescantes para começar' },
+    { name: 'Hots', icon: '🔥', description: 'Hots variados — tradicionais, crispy, temakis e mais' },
+    { name: 'Salmão', icon: '🐟', description: 'Sashimis e salmão maçaricado em porções' },
+    { name: 'Temaki', icon: '🌯', description: 'Temakis clássicos e especiais' },
+    { name: 'Sushis', icon: '🍣', description: 'Niguiris, joys, uramakis, hossomakis e mais' },
+    { name: 'Combos', icon: '🍱', description: 'Combos e combinados para compartilhar' },
+    { name: 'Pokes', icon: '🥣', description: 'Pokes frescos e saborosos' },
+    { name: 'Especiais', icon: '✨', description: 'Barcas, burgers, ichigo, pote da felicidade e molhos' },
+    { name: 'Bebidas', icon: '🥤', description: 'Refrigerantes gelados' }
   ];
+
+  // Ordered product IDs per category for correct display order
+  const categoryProductOrder: Record<string, string[]> = {
+    Destaques: ['hot-1', 'hot-6'],
+    Entradas: ['sunomono-1'],
+    Hots: ['hot-1', 'hot-2', 'hot-3', 'hot-4', 'hot-5', 'hot-7', 'hot-6'],
+    Salmão: ['sashimi-1', 'sashimi-2', 'sashimi-3', 'sashimi-4', 'sashimi-5', 'sashimi-6'],
+    Temaki: ['hot-6', 'hot-7', 'temaki-1', 'temaki-2', 'temaki-3'],
+    Sushis: ['sushi-1', 'sushi-2', 'sushi-3', 'sushi-4', 'sushi-5', 'sushi-6', 'sushi-7', 'sushi-8', 'sushi-9', 'sushi-10'],
+    Combos: ['combo-1', 'combo-2', 'combo-3', 'combo-4', 'combo-5', 'combo-6', 'comb-1', 'comb-2', 'comb-3', 'comb-4', 'comb-5'],
+    Pokes: ['poke-1', 'poke-2'],
+    Especiais: ['barca-1', 'burger-1', 'burger-2', 'special-1', 'sweet-1', 'adicional-1'],
+    Bebidas: ['bebida-1', 'bebida-2', 'bebida-3', 'bebida-4', 'bebida-5', 'bebida-7', 'bebida-8']
+  };
 
   // Cart operations
   const handleAddOrUpdateCart = (customizedItem: CartItem) => {
@@ -264,12 +296,19 @@ export default function App() {
   };
 
   // Filtered menu display list
-  const displayedProducts = products.filter(p => {
-    const matchesCategory = p.category.toLowerCase() === activeCategory.toLowerCase();
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const displayedProducts = products
+    .filter(p => {
+      const matchesCategory = p.categories && p.categories.some(c => c.toLowerCase() === activeCategory.toLowerCase());
+      const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            p.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      const order = categoryProductOrder[activeCategory] || [];
+      const ia = order.indexOf(a.id);
+      const ib = order.indexOf(b.id);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-[#0A0A0A] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans transition-colors duration-200">

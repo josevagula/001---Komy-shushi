@@ -42,7 +42,7 @@ export default function AdminPanel({
     description: '',
     price: 0,
     promoPrice: undefined,
-    category: 'Hamburgueres',
+    categories: [],
     image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=350&fit=crop&q=80',
     rating: 5.0,
     prepTime: '20-25 min',
@@ -82,7 +82,7 @@ export default function AdminPanel({
         description: productForm.description || '',
         price: Number(productForm.price),
         promoPrice: productForm.promoPrice ? Number(productForm.promoPrice) : undefined,
-        category: productForm.category || 'Hamburgueres',
+        categories: productForm.categories || [],
         image: productForm.image || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&h=350&fit=crop&q=80',
         rating: 5.0,
         prepTime: productForm.prepTime || '20 min',
@@ -100,7 +100,7 @@ export default function AdminPanel({
       description: '',
       price: 0,
       promoPrice: undefined,
-      category: 'Hamburgueres',
+      categories: [],
       image: '',
       rating: 5.0,
       prepTime: '20 min',
@@ -357,20 +357,29 @@ export default function AdminPanel({
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-zinc-500">Categoria</label>
-                      <select
-                        value={productForm.category}
-                        onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
-                      >
-                        <option value="Combos">Combos</option>
-                        <option value="Hamburgueres">Hambúrgueres</option>
-                        <option value="Sushi">Sushi / Oriental</option>
-                        <option value="Pizzas">Pizzas</option>
-                        <option value="Acompanhamentos">Acompanhamentos / Sides</option>
-                        <option value="Drinks">Drinks / Bebidas</option>
-                        <option value="Desserts">Sobremesas</option>
-                      </select>
+                      <label className="text-xs font-bold text-zinc-500">Categorias (marque uma ou mais)</label>
+                      <div className="grid grid-cols-2 gap-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs">
+                        {['Destaques', 'Entradas', 'Hots', 'Salmão', 'Temaki', 'Sushis', 'Combos', 'Pokes', 'Especiais', 'Bebidas'].map(cat => {
+                          const checked = (productForm.categories || []).includes(cat);
+                          return (
+                            <label key={cat} className="flex items-center gap-1.5 cursor-pointer text-zinc-700 dark:text-zinc-300">
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={() => {
+                                  const current = productForm.categories || [];
+                                  const next = checked
+                                    ? current.filter(c => c !== cat)
+                                    : [...current, cat];
+                                  setProductForm({ ...productForm, categories: next });
+                                }}
+                                className="accent-amber-500"
+                              />
+                              {cat}
+                            </label>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -463,7 +472,7 @@ export default function AdminPanel({
                         referrerPolicy="no-referrer"
                       />
                       <div>
-                        <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded mr-1.5">{item.category}</span>
+                        <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded mr-1.5">{item.categories?.join(', ') || 'Sem categoria'}</span>
                         <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 inline">{item.name}</h4>
                         <div className="text-xs text-zinc-500 font-mono mt-0.5">
                           {item.promoPrice ? (

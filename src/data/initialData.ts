@@ -7,7 +7,7 @@ import { Product, RestaurantConfig, Coupon } from '../types';
 
 export const initialRestaurantConfig: RestaurantConfig = {
   name: "KOMY SUSHI",
-  logo: "/images/komy_sushi_logo_1781050151731.png",
+  logo: "/images/logo.jpeg",
   banner: "/images/sushi_banner_premium_dark_1781131159755.png",
   description: "Sabor autêntico e frescor incomparável. Sushis e combinados premium preparados com maestria para a melhor experiência na sua casa.",
   rating: 5.0,
@@ -28,13 +28,13 @@ const standardSushiToppings = [
 ];
 
 export const initialProducts: Product[] = [
-  // --- DESTAQUE ---
+  // --- Destaques & Hots ---
   {
     id: "hot-1",
     name: "Hot Roll (8 unidades)",
     description: "Arroz, nori, salmão, cream cheese, cebolinha verde e molho tarê",
     price: 36.99,
-    category: "Promoções",
+    categories: ["Destaques", "Hots"],
     image: "/images/hot_roll.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -46,14 +46,31 @@ export const initialProducts: Product[] = [
       addableIngredients: []
     }
   },
+  {
+    id: "hot-6",
+    name: "Hot Temaki (1 unidade)",
+    description: "Arroz, nori, salmão, cream cheese, cebolinha verde e molho tarê",
+    price: 39.99,
+    categories: ["Destaques", "Hots", "Temaki"],
+    image: "/images/hot_temaki.png",
+    rating: 5.0,
+    prepTime: "15-20 min",
+    isBestSeller: true,
+    ingredients: ["Arroz", "Nori", "Salmão", "Cream Cheese", "Cebolinha Verde", "Molho Tarê"],
+    availableToppings: standardSushiToppings,
+    customization: {
+      removableIngredients: ["Cebolinha Verde", "Molho Tarê"],
+      addableIngredients: []
+    }
+  },
 
-  // --- SUSHIS (Includes all sushi varieties, sashimis, combos, combinados, pokes, etc) ---
+  // --- Entradas ---
   {
     id: "sunomono-1",
     name: "Sunomono",
     description: "Fatia de pepino com molho agridoce e gergelim — 100 gramas",
     price: 19.99,
-    category: "Sushis",
+    categories: ["Entradas"],
     image: "/images/sunomono_real_1781054298241.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -61,12 +78,14 @@ export const initialProducts: Product[] = [
     availableToppings: [{ name: "Gergelim Moído", price: 1.00, max: 1 }],
     customization: { enabled: false }
   },
+
+  // --- Hots ---
   {
     id: "hot-2",
     name: "Hot Roll c/ Pimenta Bico (8 unidades)",
     description: "Arroz, nori, salmão, cream cheese, cebolinha verde, molho tarê & pimenta bico",
     price: 36.99,
-    category: "Sushis",
+    categories: ["Hots"],
     image: "/images/hot_pimenta_bico.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -79,7 +98,7 @@ export const initialProducts: Product[] = [
     name: "Hot Roll Couve Crispy (8 unidades)",
     description: "Arroz, nori, salmão, cream cheese, molho tarê & couve crispy",
     price: 36.99,
-    category: "Sushis",
+    categories: ["Hots"],
     image: "/images/hot_crispy.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -93,7 +112,7 @@ export const initialProducts: Product[] = [
     name: "Hot Batata Crispy (8 unidades)",
     description: "Arroz, nori, salmão, cream cheese e batata crispy",
     price: 36.99,
-    category: "Sushis",
+    categories: ["Hots"],
     image: "/images/hot_roll_premium_1781053951166.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -106,7 +125,7 @@ export const initialProducts: Product[] = [
     name: "Hot Aberto (1 unidade)",
     description: "Arroz, nori, salmão em cubos, cream cheese, cebolinha verde e molho tarê",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Hots"],
     image: "/images/hot_aberto_real_1781054313711.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -118,28 +137,11 @@ export const initialProducts: Product[] = [
     }
   },
   {
-    id: "hot-6",
-    name: "Hot Temaki (1 unidade)",
-    description: "Arroz, nori, salmão, cream cheese, cebolinha verde e molho tarê",
-    price: 39.99,
-    category: "Sushis",
-    image: "/images/hot_temaki.png",
-    rating: 5.0,
-    prepTime: "15-20 min",
-    isBestSeller: true,
-    ingredients: ["Arroz", "Nori", "Salmão", "Cream Cheese", "Cebolinha Verde", "Molho Tarê"],
-    availableToppings: standardSushiToppings,
-    customization: {
-      removableIngredients: ["Cebolinha Verde", "Molho Tarê"],
-      addableIngredients: []
-    }
-  },
-  {
     id: "hot-7",
     name: "Hot Temaki s/ Arroz (1 unidade)",
     description: "Nori, salmão, cream cheese, cebolinha verde e molho tarê",
     price: 44.99,
-    category: "Sushis",
+    categories: ["Hots", "Temaki"],
     image: "/images/hot_temaki_no_rice_lying_table_1781055147154.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -153,13 +155,13 @@ export const initialProducts: Product[] = [
     }
   },
 
-  // --- SASHIMI (under category "Sushis") ---
+  // --- Salmão ---
   {
     id: "sashimi-1",
     name: "Sashimi Salmão Komy (4 peças)",
     description: "Salmão Komy — Lâminas de salmão — 4 peças",
     price: 36.99,
-    category: "Sushis",
+    categories: ["Salmão"],
     image: "/images/sashimi_fresh_slices_real_1781055163411.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -172,7 +174,7 @@ export const initialProducts: Product[] = [
     name: "Sashimi Salmão Komy (6 peças)",
     description: "Salmão Komy — Lâminas de salmão — 6 peças",
     price: 41.99,
-    category: "Sushis",
+    categories: ["Salmão"],
     image: "/images/sashimi_fresh_slices_real_1781055163411.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -185,7 +187,7 @@ export const initialProducts: Product[] = [
     name: "Sashimi Salmão Komy (8 peças)",
     description: "Salmão Komy — Lâminas de salmão — 8 peças",
     price: 73.99,
-    category: "Sushis",
+    categories: ["Salmão"],
     image: "/images/sashimi_fresh_slices_real_1781055163411.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -198,7 +200,7 @@ export const initialProducts: Product[] = [
     name: "Salmão Maçaricado (4 peças)",
     description: "Salmão Maçaricado — Lâminas de salmão — 4 peças",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Salmão"],
     image: "/images/sashimi_seared_slices_real_1781055180278.png",
     rating: 5.0,
     prepTime: "12-18 min",
@@ -211,7 +213,7 @@ export const initialProducts: Product[] = [
     name: "Salmão Maçaricado (6 peças)",
     description: "Salmão Maçaricado — 6 peças",
     price: 44.99,
-    category: "Sushis",
+    categories: ["Salmão"],
     image: "/images/sashimi_seared_slices_real_1781055180278.png",
     rating: 5.0,
     prepTime: "12-18 min",
@@ -224,7 +226,7 @@ export const initialProducts: Product[] = [
     name: "Salmão Maçaricado (8 peças)",
     description: "Salmão Maçaricado — 8 peças",
     price: 77.99,
-    category: "Sushis",
+    categories: ["Salmão"],
     image: "/images/sashimi_seared_slices_real_1781055180278.png",
     rating: 5.0,
     prepTime: "12-18 min",
@@ -233,13 +235,13 @@ export const initialProducts: Product[] = [
     customization: { enabled: false }
   },
 
-  // --- TEMAKI (under category "Sushis") ---
+  // --- Temaki ---
   {
     id: "temaki-1",
     name: "Temaki c/ Salmão em Cubos",
     description: "Arroz, nori, salmão, gergelim, cebolinha verde e molho tarê",
     price: 33.99,
-    category: "Sushis",
+    categories: ["Temaki"],
     image: "/images/hot_temaki_lying_table_1781055129959.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -258,7 +260,7 @@ export const initialProducts: Product[] = [
     name: "Temaki Salmão s/ Arroz",
     description: "Nori, salmão, gergelim, cebolinha verde & molho tarê",
     price: 39.99,
-    category: "Sushis",
+    categories: ["Temaki"],
     image: "/images/hot_temaki_no_rice_lying_table_1781055147154.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -276,7 +278,7 @@ export const initialProducts: Product[] = [
     name: "Temaki Skin",
     description: "Arroz, nori, pele de salmão, cream cheese, cebolinha verde & gergelim",
     price: 31.99,
-    category: "Sushis",
+    categories: ["Temaki"],
     image: "/images/hot_temaki_lying_table_1781055129959.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -288,13 +290,13 @@ export const initialProducts: Product[] = [
     }
   },
 
-  // --- SUSHIS - all 8 unidades (under category "Sushis") ---
+  // --- Sushis ---
   {
     id: "sushi-1",
     name: "Niguiri Salmão (8 unidades)",
     description: "Arroz, fatia de salmão",
     price: 37.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/niguiri_salmao_real_1781055795296.png",
     rating: 5.0,
     prepTime: "12-18 min",
@@ -307,7 +309,7 @@ export const initialProducts: Product[] = [
     name: "Niguiri Maçaricado (8 unidades)",
     description: "Arroz, fatia de salmão maçaricado",
     price: 39.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/niguiri_macaricado_real_1781055808570.png",
     rating: 5.0,
     prepTime: "12-18 min",
@@ -320,7 +322,7 @@ export const initialProducts: Product[] = [
     name: "Joy Salmão (8 unidades)",
     description: "Arroz, fatia de salmão, cream cheese, cebolinha verde",
     price: 37.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/niguiri_salmao_real_1781055795296.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -337,7 +339,7 @@ export const initialProducts: Product[] = [
     name: "Joy Maçaricado (8 unidades)",
     description: "Arroz, fatia de salmão maçaricado, cream cheese, cebolinha verde",
     price: 37.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/joy_macaricado_real_1781055818957.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -353,7 +355,7 @@ export const initialProducts: Product[] = [
     name: "Joy Pimenta Bico (8 unidades)",
     description: "Arroz, fatia de salmão, cream cheese, pimenta bico",
     price: 40.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/joy_macaricado_real_1781055818957.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -366,7 +368,7 @@ export const initialProducts: Product[] = [
     name: "Joy Maçaricado c/ Geléia do Chef (8 unidades)",
     description: "Arroz, fatia de salmão maçaricado, cream cheese, geléia do chef",
     price: 39.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/joy_macaricado_real_1781055818957.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -380,7 +382,7 @@ export const initialProducts: Product[] = [
     name: "Uramaki Salmão Grelhado (8 unidades)",
     description: "Arroz, nori, salmão grelhado, cream cheese",
     price: 40.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -393,7 +395,7 @@ export const initialProducts: Product[] = [
     name: "Uramaki Philadelfia (8 unidades)",
     description: "Arroz, nori, salmão, cream cheese",
     price: 37.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -407,7 +409,7 @@ export const initialProducts: Product[] = [
     name: "Uramaki Skin (8 unidades)",
     description: "Arroz, nori, pele de salmão, cream cheese",
     price: 31.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -420,7 +422,7 @@ export const initialProducts: Product[] = [
     name: "Hossomaki Shakemaki (8 unidades)",
     description: "Arroz, nori, salmão — 8 unidades",
     price: 31.99,
-    category: "Sushis",
+    categories: ["Sushis"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "10-15 min",
@@ -429,13 +431,13 @@ export const initialProducts: Product[] = [
     customization: { enabled: false }
   },
 
-  // --- COMBOS (under category "Sushis") ---
+  // --- Combos ---
   {
     id: "combo-1",
     name: "Combo 1 (8 unidades)",
     description: "Combo 1 — 2 Hots, 2 Uramaki, 2 Hossomaki, 2 Joy",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -451,7 +453,7 @@ export const initialProducts: Product[] = [
     name: "Combo 2 (8 unidades)",
     description: "Combo 2 — 2 Hots, 2 Uramaki, 2 Niguiri, 2 Joy",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -467,7 +469,7 @@ export const initialProducts: Product[] = [
     name: "Combo 3 (8 unidades)",
     description: "Combo 3 — 2 Hots, 2 Uramaki, 2 Joy, 2 Ichigo",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/combo_03.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -483,7 +485,7 @@ export const initialProducts: Product[] = [
     name: "Combo 4 (8 unidades)",
     description: "Combo 4 — 4 Hots, 4 Uramaki",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -499,7 +501,7 @@ export const initialProducts: Product[] = [
     name: "Combo 5 (8 unidades)",
     description: "Combo 5 — 2 Uramaki, 2 Ichigo, 2 Hot Crispy, 2 Hot Roll",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -515,7 +517,7 @@ export const initialProducts: Product[] = [
     name: "Combo 6 (8 unidades)",
     description: "Combo 6 — 2 Uramaki, 2 Ichigo, 4 Hot Roll",
     price: 38.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/sushi_combo_real_1781055442244.png",
     rating: 5.0,
     prepTime: "20-25 min",
@@ -526,14 +528,12 @@ export const initialProducts: Product[] = [
       addableIngredients: []
     }
   },
-
-  // --- COMBINADOS (under category "Sushis") ---
   {
     id: "comb-1",
     name: "Combinado 1 (35 peças)",
     description: "8 peças de Hot Tradicional, 8 peças de Geléia do Chef, 8 peças de Hot Crispy Batata, 11 peças de Hot Crispy Couve",
     price: 76.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/combinado_01.png",
     rating: 5.0,
     prepTime: "30-40 min",
@@ -550,7 +550,7 @@ export const initialProducts: Product[] = [
     name: "Combinado 2 (35 peças)",
     description: "8 peças de Hot Tradicional, 8 peças com Geléia do Chef, 8 peças de Hot Crispy Batata, 7 peças de Uramaki Philadelfia, 4 peças de Hossomaki Shakemaki",
     price: 79.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/combinado_02.png",
     rating: 5.0,
     prepTime: "30-40 min",
@@ -566,7 +566,7 @@ export const initialProducts: Product[] = [
     name: "Combinado 3 (19 peças)",
     description: "4 peças de Hot Tradicional, 4 peças com Geléia do Chef, 4 peças de Hot Crispy Batata, 4 peças de Hossomaki Shakemaki, 3 peças de Uramaki Philadelfia",
     price: 52.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/combinado_03.png",
     rating: 5.0,
     prepTime: "25-30 min",
@@ -582,7 +582,7 @@ export const initialProducts: Product[] = [
     name: "Combinado 4 (19 peças)",
     description: "4 peças de Hot Tradicional, 4 peças com Geléia do Chef, 4 peças de Hot Crispy Batata, 4 peças de Hossomaki Shakemaki, 3 Joy",
     price: 52.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/combinado_04.png",
     rating: 5.0,
     prepTime: "25-30 min",
@@ -598,7 +598,7 @@ export const initialProducts: Product[] = [
     name: "Combinado 5 (18 peças)",
     description: "2 peças de Hot Tradicional, 2 peças de Hot Crispy Couve, 2 peças de Hot Pimenta Bico, 2 peças de Hot Crispy Batata, 2 peças de Joy com Geléia do Chef, 4 peças de Uramaki Philadelfia, 4 peças de Hossomaki Shakemaki",
     price: 49.99,
-    category: "Sushis",
+    categories: ["Combos"],
     image: "/images/sushi_combinado_real_1781055460922.png",
     rating: 5.0,
     prepTime: "25-30 min",
@@ -610,32 +610,13 @@ export const initialProducts: Product[] = [
     }
   },
 
-  // --- BARCA (under category "Sushis") ---
-  {
-    id: "barca-1",
-    name: "Barca Komy (23 peças)",
-    description: "1 BARCA — 23 peças: 4 lâminas, 4 Hot Roll, 4 Uramaki, 2 Niguiri, 2 Joy, 4 Hossomaki, 3 Ichigo",
-    price: 84.99,
-    category: "Sushis",
-    image: "/images/sushi_combinado_real_1781055460922.png",
-    rating: 5.0,
-    prepTime: "25-35 min",
-    isFeatured: true,
-    ingredients: ["Sashimi", "Hot Roll", "Uramaki", "Niguiri", "Joy", "Hossomaki", "Ichigo doce"],
-    availableToppings: [],
-    customization: {
-      removableIngredients: ["Cebolinha"],
-      addableIngredients: []
-    }
-  },
-
-  // --- POKE (under category "Sushis") ---
+  // --- Pokes ---
   {
     id: "poke-1",
     name: "Poke Salmão Grelhado",
     description: "Arroz, cream cheese, salmão grelhado, sunomono, salada de repolho agridoce, couve crispy, batata doce crispy, tomate cereja, cebola roxa, cebolinha verde, gergelim & molho tarê — aprox. 400g",
     price: 47.99,
-    category: "Sushis",
+    categories: ["Pokes"],
     image: "/images/poke_grelhado.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -655,7 +636,7 @@ export const initialProducts: Product[] = [
     name: "Poke Salmão em Cubos",
     description: "Arroz, cream cheese, salmão em cubos, sunomono, salada de repolho agridoce, couve crispy, batata doce crispy, tomate cereja, cebola roxa, cebolinha verde, gergelim & molho tarê — aprox. 400g",
     price: 44.99,
-    category: "Sushis",
+    categories: ["Pokes"],
     image: "/images/poke_em_cubos.png",
     rating: 5.0,
     prepTime: "15-20 min",
@@ -672,44 +653,30 @@ export const initialProducts: Product[] = [
     }
   },
 
-  // --- SOBREMESA - ICHIGO (under category "Sushis") ---
+  // --- Especiais ---
   {
-    id: "sweet-1",
-    name: "Ichigo (8 unidades)",
-    description: "Goiabada, cream cheese, morango & leite condensado",
-    price: 33.99,
-    category: "Sushis",
-    image: "/images/ichigo_sweet_1781052762028.png",
+    id: "barca-1",
+    name: "Barca Komy (23 peças)",
+    description: "1 BARCA — 23 peças: 4 lâminas, 4 Hot Roll, 4 Uramaki, 2 Niguiri, 2 Joy, 4 Hossomaki, 3 Ichigo",
+    price: 84.99,
+    categories: ["Especiais"],
+    image: "/images/sushi_combinado_real_1781055460922.png",
     rating: 5.0,
-    prepTime: "10-15 min",
-    isBestSeller: true,
-    ingredients: ["Goiabada", "Cream Cheese", "Morango", "Leite Condensado"],
+    prepTime: "25-35 min",
+    isFeatured: true,
+    ingredients: ["Sashimi", "Hot Roll", "Uramaki", "Niguiri", "Joy", "Hossomaki", "Ichigo doce"],
     availableToppings: [],
-    customization: { enabled: false }
+    customization: {
+      removableIngredients: ["Cebolinha"],
+      addableIngredients: []
+    }
   },
-
-  // --- POTE DA FELICIDADE (under category "Sushis") ---
-  {
-    id: "special-1",
-    name: "Pote da Felicidade (1 unidade)",
-    description: "Arroz, cream cheese & salmão — aprox. 150 gramas",
-    price: 31.99,
-    category: "Sushis",
-    image: "/images/pote_da_felicidade.png",
-    rating: 5.0,
-    prepTime: "10-15 min",
-    ingredients: ["Arroz Shari", "Cream Cheese", "Salmão fresco em cubos"],
-    availableToppings: standardSushiToppings,
-    customization: { enabled: false }
-  },
-
-  // --- BURGER KOMY (under category "Sushis") ---
   {
     id: "burger-1",
     name: "Burger Komy c/ Salmão Grelhado",
     description: "Arroz prensado, salmão grelhado, cebola roxa, cream cheese, cebolinha verde, mussarela em fatias — aprox. 200 gramas",
     price: 46.99,
-    category: "Sushis",
+    categories: ["Especiais"],
     image: "/images/burger_komy_1781052743744.png",
     rating: 5.0,
     prepTime: "18-25 min",
@@ -726,7 +693,7 @@ export const initialProducts: Product[] = [
     name: "Burger Komy c/ Salmão em Cubos",
     description: "Arroz prensado, salmão em cubos, cebola roxa, cream cheese, cebolinha verde, mussarela em fatias — aprox. 200 gramas",
     price: 41.99,
-    category: "Sushis",
+    categories: ["Especiais"],
     image: "/images/burger_komy_cubos_1781054809469.png",
     rating: 5.0,
     prepTime: "18-25 min",
@@ -737,14 +704,39 @@ export const initialProducts: Product[] = [
       addableIngredients: []
     }
   },
-
-  // --- ADICIONAL (under category "Sushis") ---
+  {
+    id: "special-1",
+    name: "Pote da Felicidade (1 unidade)",
+    description: "Arroz, cream cheese & salmão — aprox. 150 gramas",
+    price: 31.99,
+    categories: ["Especiais"],
+    image: "/images/pote_da_felicidade.png",
+    rating: 5.0,
+    prepTime: "10-15 min",
+    ingredients: ["Arroz Shari", "Cream Cheese", "Salmão fresco em cubos"],
+    availableToppings: standardSushiToppings,
+    customization: { enabled: false }
+  },
+  {
+    id: "sweet-1",
+    name: "Ichigo (8 unidades)",
+    description: "Goiabada, cream cheese, morango & leite condensado",
+    price: 33.99,
+    categories: ["Especiais"],
+    image: "/images/ichigo_sweet_1781052762028.png",
+    rating: 5.0,
+    prepTime: "10-15 min",
+    isBestSeller: true,
+    ingredients: ["Goiabada", "Cream Cheese", "Morango", "Leite Condensado"],
+    availableToppings: [],
+    customization: { enabled: false }
+  },
   {
     id: "adicional-1",
     name: "Molho Tarê 35ml",
     description: "Molho Tarê 35ml para complementar suas peças",
     price: 6.00,
-    category: "Sushis",
+    categories: ["Especiais"],
     image: "/images/molho_tare.png",
     rating: 5.0,
     prepTime: "1 min",
@@ -753,13 +745,13 @@ export const initialProducts: Product[] = [
     customization: { enabled: false }
   },
 
-  // --- BEBIDAS (under category "BEBIDAS") ---
+  // --- Bebidas ---
   {
     id: "bebida-1",
     name: "Coca-Cola 350ml",
     description: "Refrigerante Coca-Cola em lata original de 350ml bem gelado",
     price: 6.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/coca_cola_2l_1781053935428.png",
     rating: 5.0,
     prepTime: "2-5 min",
@@ -771,7 +763,7 @@ export const initialProducts: Product[] = [
     name: "Coca-Cola Lata Zero 350ml",
     description: "Refrigerante Coca-Cola lata versão sem açúcar gelada de 350ml",
     price: 6.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/coca_cola_2l_1781053935428.png",
     rating: 5.0,
     prepTime: "2-5 min",
@@ -783,7 +775,7 @@ export const initialProducts: Product[] = [
     name: "Fanta Uva 350ml",
     description: "Refrigerante Fanta sabor Uva em lata de 350ml super gelada",
     price: 6.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/fanta_grape_1781053559514.png",
     rating: 5.0,
     prepTime: "2-5 min",
@@ -795,7 +787,7 @@ export const initialProducts: Product[] = [
     name: "Fanta Laranja 350ml",
     description: "Refrigerante Fanta Laranja refrescante em lata de 350ml bem gelada",
     price: 6.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/fanta_orange_1781053576954.png",
     rating: 5.0,
     prepTime: "2-5 min",
@@ -807,22 +799,10 @@ export const initialProducts: Product[] = [
     name: "Sprite 350ml",
     description: "Refrigerante Sprite em lata refrescante sabor limão de 350ml",
     price: 6.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/sprite_can_1781053591910.png",
     rating: 5.0,
     prepTime: "2-5 min",
-    ingredients: [],
-    availableToppings: []
-  },
-  {
-    id: "bebida-6",
-    name: "Suco Summer Orange 300ml",
-    description: "Delicioso suco natural gelado sabor laranja refrescante de 300ml",
-    price: 10.00,
-    category: "BEBIDAS",
-    image: "/images/summer_orange_juice_1781053918553.png",
-    rating: 5.0,
-    prepTime: "3-5 min",
     ingredients: [],
     availableToppings: []
   },
@@ -831,7 +811,7 @@ export const initialProducts: Product[] = [
     name: "Coca-Cola 2 Litros",
     description: "Refrigerante Coca-Cola tamanho de 2 Litros perfeito para seu combinado",
     price: 15.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/coca_cola_2l_1781053935428.png",
     rating: 5.0,
     prepTime: "2-5 min",
@@ -843,7 +823,7 @@ export const initialProducts: Product[] = [
     name: "Coca-Cola 2 Litros (Zero)",
     description: "Refrigerante Coca-Cola sem açúcar tamanho de 2 Litros gelada",
     price: 15.00,
-    category: "BEBIDAS",
+    categories: ["Bebidas"],
     image: "/images/coca_cola_2l_1781053935428.png",
     rating: 5.0,
     prepTime: "2-5 min",
