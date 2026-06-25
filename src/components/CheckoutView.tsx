@@ -5,15 +5,13 @@
 
 import React, { useState } from 'react';
 import { ChevronLeft, MapPin, CreditCard, ShoppingBag, Landmark, Coins, Check, AlertCircle, Copy, Info } from 'lucide-react';
-import { CartItem, CustomerInfo, AddressInfo, PaymentMethod, Coupon } from '../types';
+import { CartItem, CustomerInfo, AddressInfo, PaymentMethod } from '../types';
 
 interface CheckoutViewProps {
   cart: CartItem[];
   subtotal: number;
   deliveryFee: number;
-  discount: number;
   total: number;
-  appliedCoupon: Coupon | null;
   onBackToCart: () => void;
   onConfirmOrder: (orderPayload: {
     customer: CustomerInfo;
@@ -28,9 +26,7 @@ export default function CheckoutView({
   cart,
   subtotal,
   deliveryFee,
-  discount,
   total,
-  appliedCoupon,
   onBackToCart,
   onConfirmOrder
 }: CheckoutViewProps) {
@@ -177,7 +173,7 @@ export default function CheckoutView({
             if (step > 1) setStep(step - 1);
             else onBackToCart();
           }}
-          className="p-2.5 rounded-xl bg-zinc-100 dark:bg-[#0F0F0F] hover:bg-zinc-200 dark:hover:bg-[#121212] border dark:border-white/5 text-zinc-700 dark:text-zinc-250 transition-colors flex items-center justify-center cursor-pointer"
+          className="p-2.5 rounded-xl bg-[#0F0F0F] hover:bg-[#121212] border border-white/5 text-zinc-400 transition-colors flex items-center justify-center cursor-pointer"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -190,23 +186,23 @@ export default function CheckoutView({
       {/* Checkout step progress indicators */}
       <div className="flex items-center justify-between mb-8 px-2 max-w-md mx-auto">
         <div className="flex flex-col items-center gap-1.5">
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${step >= 1 ? 'bg-amber-500 text-zinc-950 font-black' : 'bg-zinc-200 text-zinc-500'}`}>1</div>
-          <span className="text-[11px] font-bold text-zinc-630 dark:text-zinc-400">Dados & Entrega</span>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${step >= 1 ? 'bg-amber-500 text-zinc-950 font-black' : 'bg-zinc-800 text-zinc-500'}`}>1</div>
+          <span className="text-[11px] font-bold text-zinc-400">Dados & Entrega</span>
         </div>
-        <div className="flex-1 h-0.5 bg-zinc-200 dark:bg-zinc-800 mx-2 mb-4" />
+        <div className="flex-1 h-0.5 bg-zinc-800 mx-2 mb-4" />
         <div className="flex flex-col items-center gap-1.5">
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${step >= 2 ? 'bg-amber-500 text-zinc-950 font-black' : 'bg-zinc-200 text-zinc-500'}`}>2</div>
-          <span className="text-[11px] font-bold text-zinc-630 dark:text-zinc-400">Pagamento</span>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${step >= 2 ? 'bg-amber-500 text-zinc-950 font-black' : 'bg-zinc-800 text-zinc-500'}`}>2</div>
+          <span className="text-[11px] font-bold text-zinc-400">Pagamento</span>
         </div>
-        <div className="flex-1 h-0.5 bg-zinc-200 dark:bg-zinc-800 mx-2 mb-4" />
+        <div className="flex-1 h-0.5 bg-zinc-800 mx-2 mb-4" />
         <div className="flex flex-col items-center gap-1.5">
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${step >= 3 ? 'bg-amber-500 text-zinc-950 font-black' : 'bg-zinc-200 text-zinc-500'}`}>3</div>
-          <span className="text-[11px] font-bold text-zinc-630 dark:text-zinc-400">Revisão Final</span>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${step >= 3 ? 'bg-amber-500 text-zinc-950 font-black' : 'bg-zinc-800 text-zinc-500'}`}>3</div>
+          <span className="text-[11px] font-bold text-zinc-400">Revisão Final</span>
         </div>
       </div>
 
       {/* Card Content block */}
-      <div className="bg-white dark:bg-[#0F0F0F] border border-zinc-150 dark:border-white/10 rounded-3xl p-5 md:p-7 shadow-lg">
+      <div className="bg-[#0F0F0F] border border-white/10 rounded-3xl p-5 md:p-7 shadow-lg">
         
         {/* STEP 1: CLIENT AND SHIP ADDRESS */}
         {step === 1 && (
@@ -224,7 +220,7 @@ export default function CheckoutView({
                     onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
                     required
                     placeholder="Ex: João da Silva Santos"
-                    className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                    className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
                   />
                 </div>
                 
@@ -236,7 +232,7 @@ export default function CheckoutView({
                     onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
                     required
                     placeholder="Ex: (11) 99999-9999"
-                    className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                    className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -252,7 +248,7 @@ export default function CheckoutView({
                   className={`flex-1 p-3.5 rounded-2xl border text-center font-bold text-xs tracking-wide transition-all cursor-pointer ${
                     deliveryType === 'delivery'
                       ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400'
-                      : 'bg-zinc-50 dark:bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
+                      : 'bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
                   }`}
                 >
                   🚗 Delivery
@@ -263,7 +259,7 @@ export default function CheckoutView({
                   className={`flex-1 p-3.5 rounded-2xl border text-center font-bold text-xs tracking-wide transition-all cursor-pointer ${
                     deliveryType === 'pickup'
                       ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400'
-                      : 'bg-zinc-50 dark:bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
+                      : 'bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
                   }`}
                 >
                   🚶 Retirar no Local
@@ -286,7 +282,7 @@ export default function CheckoutView({
                       onChange={(e) => handleCepLookup(e.target.value)}
                       placeholder="Ex: 01310-100"
                       maxLength={9}
-                      className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white font-mono focus:border-amber-500 outline-none transition-colors"
+                      className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white font-mono focus:border-amber-500 outline-none transition-colors"
                     />
                     {cepLoading && (
                       <span className="text-[10px] text-zinc-400">Buscando endereço...</span>
@@ -305,7 +301,7 @@ export default function CheckoutView({
                       onChange={(e) => setAddress({ ...address, street: e.target.value })}
                       required
                       placeholder="Ex: Avenida Paulista"
-                      className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                      className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
                     />
                   </div>
 
@@ -318,7 +314,7 @@ export default function CheckoutView({
                       onChange={(e) => setAddress({ ...address, number: e.target.value })}
                       required
                       placeholder="Ex: 123"
-                      className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white font-mono focus:border-amber-500 outline-none transition-colors"
+                      className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white font-mono focus:border-amber-500 outline-none transition-colors"
                     />
                   </div>
 
@@ -331,7 +327,7 @@ export default function CheckoutView({
                       onChange={(e) => setAddress({ ...address, neighborhood: e.target.value })}
                       required
                       placeholder="Ex: Bela Vista"
-                      className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                      className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
                     />
                   </div>
 
@@ -346,7 +342,7 @@ export default function CheckoutView({
                       value={address.complement}
                       onChange={(e) => setAddress({ ...address, complement: e.target.value })}
                       placeholder="Apto 45, Bloco B"
-                      className="bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                      className="bg-zinc-850 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl text-sm text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -375,8 +371,8 @@ export default function CheckoutView({
                   onClick={() => setPaymentMethod('pix')}
                   className={`p-4 rounded-2xl border text-center font-bold text-xs tracking-wide transition-all cursor-pointer flex flex-col items-center gap-2 ${
                     paymentMethod === 'pix'
-                      ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400 font-extrabold'
-                      : 'bg-zinc-50 dark:bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
+                      ? 'bg-amber-500/10 border-amber-500 text-amber-400 font-extrabold'
+                      : 'bg-zinc-850 border-zinc-800 text-zinc-500'
                   }`}
                 >
                   <Landmark className="w-5.5 h-5.5 text-amber-500" />
@@ -388,8 +384,8 @@ export default function CheckoutView({
                   onClick={() => setPaymentMethod('credit')}
                   className={`p-4 rounded-2xl border text-center font-bold text-xs tracking-wide transition-all cursor-pointer flex flex-col items-center gap-2 ${
                     paymentMethod === 'credit'
-                      ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400 font-extrabold'
-                      : 'bg-zinc-50 dark:bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
+                      ? 'bg-amber-500/10 border-amber-500 text-amber-400 font-extrabold'
+                      : 'bg-zinc-850 border-zinc-800 text-zinc-500'
                   }`}
                 >
                   <CreditCard className="w-5.5 h-5.5 text-amber-500" />
@@ -401,8 +397,8 @@ export default function CheckoutView({
                   onClick={() => setPaymentMethod('cash')}
                   className={`p-4 rounded-2xl border text-center font-bold text-xs tracking-wide transition-all cursor-pointer flex flex-col items-center gap-2 ${
                     paymentMethod === 'cash'
-                      ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400 font-extrabold'
-                      : 'bg-zinc-50 dark:bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-500'
+                      ? 'bg-amber-500/10 border-amber-500 text-amber-400 font-extrabold'
+                      : 'bg-zinc-850 border-zinc-800 text-zinc-500'
                   }`}
                 >
                   <Coins className="w-5.5 h-5.5 text-amber-500" />
@@ -418,7 +414,7 @@ export default function CheckoutView({
                   <Info className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200">Como pagar via Pix</h4>
-                    <p className="text-xs text-zinc-550 dark:text-zinc-400 mt-1 leading-relaxed">
+                    <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
                       Ao finalizar o pedido, geraremos um resumo completo para você enviar diretamente para o nosso atendimento pelo WhatsApp. Nossa chave Pix será enviada na sequência para você concluir o pagamento de forma rápida e segura!
                     </p>
                   </div>
@@ -427,12 +423,12 @@ export default function CheckoutView({
             )}
 
             {paymentMethod === 'credit' && (
-              <div className="p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-850/50 border border-zinc-200 dark:border-zinc-800 space-y-3 animate-in slide-in-from-top-4 duration-200">
+              <div className="p-5 rounded-2xl bg-zinc-850/50 border border-zinc-800 space-y-3 animate-in slide-in-from-top-4 duration-200">
                 <div className="flex gap-2.5">
                   <CreditCard className="w-5.5 h-5.5 text-amber-500 shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200">Pagar na Entrega</h4>
-                    <p className="text-xs text-zinc-550 dark:text-zinc-400 mt-1 leading-relaxed">
+                    <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
                       O entregador levará a maquininha física de cartão de crédito e débito até o seu endereço. Aceitamos todas as principais bandeiras (Visa, Mastercard, Elo, Amex, Hipercard).
                     </p>
                   </div>
@@ -441,7 +437,7 @@ export default function CheckoutView({
             )}
 
             {paymentMethod === 'cash' && (
-              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-850/50 border border-zinc-158 dark:border-zinc-800 space-y-4 animate-in slide-in-from-top-4 duration-200">
+              <div className="p-4 rounded-2xl bg-zinc-850/50 border border-zinc-800 space-y-4 animate-in slide-in-from-top-4 duration-200">
                 <div>
                   <label className="text-sm font-bold text-zinc-800 dark:text-zinc-200 block mb-2">Precisa de Troco para o Entregador?</label>
                   
@@ -454,8 +450,8 @@ export default function CheckoutView({
                       }}
                       className={`px-5 py-2.5 rounded-xl border text-xs font-bold tracking-wider transition-colors cursor-pointer ${
                         needsChange === true
-                          ? 'bg-amber-500/15 border-amber-500 text-amber-600 dark:text-amber-400'
-                          : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600'
+                          ? 'bg-amber-500/15 border-amber-500 text-amber-400'
+                          : 'bg-zinc-900 border-zinc-800 text-zinc-600'
                       }`}
                     >
                       Sim, Preciso
@@ -469,8 +465,8 @@ export default function CheckoutView({
                       }}
                       className={`px-5 py-2.5 rounded-xl border text-xs font-bold tracking-wider transition-colors cursor-pointer ${
                         needsChange === false
-                          ? 'bg-amber-500/15 border-amber-500 text-amber-600 dark:text-amber-400'
-                          : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600'
+                          ? 'bg-amber-500/15 border-amber-500 text-amber-400'
+                          : 'bg-zinc-900 border-zinc-800 text-zinc-600'
                       }`}
                     >
                       Não Preciso (Traga o valor exato)
@@ -488,7 +484,7 @@ export default function CheckoutView({
                         value={changeForValue}
                         onChange={(e) => setChangeForValue(e.target.value)}
                         placeholder="100,00"
-                        className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-8 pr-4 py-2.5 rounded-xl text-sm font-mono text-zinc-905 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                        className="w-full bg-zinc-900 border border-zinc-800 pl-8 pr-4 py-2.5 rounded-xl text-sm font-mono text-white focus:border-amber-500 outline-none"
                       />
                     </div>
                     {parseFloat(changeForValue.replace(',', '.')) <= total && (
@@ -509,15 +505,15 @@ export default function CheckoutView({
               
               {/* Client & Shipping brief metadata */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-3.5 bg-zinc-50 dark:bg-zinc-850 border border-zinc-100 dark:border-zinc-800/80 rounded-2xl">
+                <div className="p-3.5 bg-zinc-850 border border-zinc-100 dark:border-zinc-800/80 rounded-2xl">
                   <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block mb-1">Informações do Cliente</span>
-                  <p className="text-sm font-extrabold text-zinc-805 dark:text-zinc-200">{customer.name}</p>
+                  <p className="text-sm font-extrabold text-zinc-200">{customer.name}</p>
                   <p className="text-xs text-zinc-500 mt-0.5">{customer.phone}</p>
                 </div>
 
-                <div className="p-3.5 bg-zinc-50 dark:bg-zinc-850 border border-zinc-105 dark:border-zinc-800/80 rounded-2xl">
+                <div className="p-3.5 bg-zinc-850 border border-zinc-105 dark:border-zinc-800/80 rounded-2xl">
                   <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block mb-1">Meio de Entrega</span>
-                  <p className="text-sm font-extrabold text-zinc-850 dark:text-zinc-200 font-black text-amber-600 dark:text-amber-400">
+                  <p className="text-sm font-extrabold font-black text-amber-400">
                     {deliveryType === 'delivery' ? '🚗 Delivery' : '🚶 Retirada no Local'}
                   </p>
                   {deliveryType === 'delivery' ? (
@@ -529,11 +525,11 @@ export default function CheckoutView({
                   )}
                 </div>
 
-                <div className="p-3.5 bg-zinc-50 dark:bg-zinc-850 border border-zinc-105 dark:border-zinc-800/80 rounded-2xl md:col-span-2">
+                <div className="p-3.5 bg-zinc-850 border border-zinc-105 dark:border-zinc-800/80 rounded-2xl md:col-span-2">
                   <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider block mb-1">Método de Pagamento Escolhido</span>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <Check className="w-4 h-4 text-emerald-500" />
-                    <span className="text-sm font-extrabold text-zinc-800 dark:text-zinc-205 capitalize">
+                    <span className="text-sm font-extrabold text-zinc-200 capitalize">
                       {paymentMethod === 'pix' ? 'Pix pelo WhatsApp' : paymentMethod === 'credit' ? 'Cartão (Crédito ou Débito na entrega)' : 'Dinheiro físico'}
                     </span>
                     {paymentMethod === 'cash' && needsChange && (
@@ -550,7 +546,7 @@ export default function CheckoutView({
               
               <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
                 {cart.map((item) => (
-                  <div key={item.cartId} className="flex justify-between items-center text-xs p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl">
+                  <div key={item.cartId} className="flex justify-between items-center text-xs p-2 bg-zinc-950 rounded-xl">
                     <div className="min-w-0 pr-4">
                       <span className="font-bold text-zinc-800 dark:text-zinc-200">{item.quantity}x {item.product.name}</span>
                       {item.customizationSummary && (
@@ -584,7 +580,7 @@ export default function CheckoutView({
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 text-zinc-700 px-5 h-12 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                className="bg-zinc-800 text-zinc-300 px-5 h-12 rounded-xl text-xs font-bold transition-all cursor-pointer"
               >
                 Voltar
               </button>
@@ -595,7 +591,7 @@ export default function CheckoutView({
                 type="button"
                 onClick={handleNextStep}
                 disabled={step === 1 ? !isStep1Valid() : !isStep2Valid()}
-                className="bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 hover:bg-amber-500 hover:text-zinc-950 dark:hover:bg-amber-500 dark:hover:text-zinc-950 disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 px-6 h-12 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1 cursor-pointer"
+                className="bg-zinc-900 text-white hover:bg-amber-500 hover:text-zinc-950 disabled:bg-zinc-800 disabled:text-zinc-400 px-6 h-12 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1 cursor-pointer"
               >
                 Prosseguir
               </button>

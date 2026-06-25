@@ -23,10 +23,10 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
     <div 
       id={`product-card-${product.id}`}
       onClick={() => onSelect(product)}
-      className="bg-white dark:bg-zinc-900/50 rounded-3xl border border-zinc-150 dark:border-white/5 p-4 hover:shadow-xl hover:border-amber-550/30 dark:hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between cursor-pointer group h-full hover:shadow-amber-500/5"
+      className="bg-zinc-900/50 rounded-3xl border border-white/5 p-4 hover:shadow-xl hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between cursor-pointer group h-full hover:shadow-amber-500/5"
     >
       {/* Product Image and badges */}
-      <div className="relative rounded-xl overflow-hidden aspect-video bg-zinc-100 dark:bg-zinc-800 mb-3">
+      <div className="relative rounded-xl overflow-hidden aspect-video bg-zinc-800 mb-3">
         <img 
           src={product.image} 
           alt={product.name} 
@@ -62,7 +62,7 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
           <div className="flex flex-col">
             {hasDiscount ? (
               <>
-                <span className="text-zinc-440 dark:text-zinc-505 line-through text-[11px] font-mono leading-none">
+                <span className="text-zinc-400 line-through text-[11px] font-mono leading-none">
                   R$ {product.price.toFixed(2).replace('.', ',')}
                 </span>
                 <span className="text-amber-600 dark:text-amber-400 font-extrabold text-base leading-tight font-mono">
@@ -82,7 +82,7 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
               e.stopPropagation();
               onSelect(product);
             }}
-            className="bg-zinc-100 dark:bg-zinc-800 hover:bg-amber-500 dark:hover:bg-amber-500 hover:text-zinc-950 dark:hover:text-zinc-950 text-zinc-800 dark:text-zinc-200 px-3.5 py-1.5 rounded-xl font-semibold text-xs tracking-wide transition-all duration-300 flex items-center gap-1 group-hover:bg-amber-500 group-hover:text-zinc-950 shadow-sm cursor-pointer"
+            className="bg-zinc-800 hover:bg-amber-500 hover:text-zinc-950 text-zinc-200 px-3.5 py-1.5 rounded-xl font-semibold text-xs tracking-wide transition-all duration-300 flex items-center gap-1 group-hover:bg-amber-500 group-hover:text-zinc-950 shadow-sm cursor-pointer"
           >
             Adicionar
             <ChevronRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />

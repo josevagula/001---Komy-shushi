@@ -4,14 +4,12 @@
  */
 
 import React, { useState } from 'react';
-import { LayoutDashboard, Store, Plus, Edit, Trash2, Check, X, ShieldAlert, DollarSign, Package2, Tag, Truck, ToggleLeft, ToggleRight, Loader2, RefreshCw } from 'lucide-react';
-import { Product, Coupon, RestaurantConfig, Order } from '../types';
+import { LayoutDashboard, Store, Plus, Edit, Trash2, Check, X, ShieldAlert, DollarSign, Package2, Truck, ToggleLeft, ToggleRight, Loader2, RefreshCw } from 'lucide-react';
+import { Product, RestaurantConfig, Order } from '../types';
 
 interface AdminPanelProps {
   products: Product[];
   onUpdateProducts: (newProducts: Product[]) => void;
-  coupons: Coupon[];
-  onUpdateCoupons: (newCoupons: Coupon[]) => void;
   config: RestaurantConfig;
   onUpdateConfig: (newConfig: RestaurantConfig) => void;
   orders: Order[];
@@ -23,8 +21,6 @@ interface AdminPanelProps {
 export default function AdminPanel({
   products,
   onUpdateProducts,
-  coupons,
-  onUpdateCoupons,
   config,
   onUpdateConfig,
   orders,
@@ -32,7 +28,7 @@ export default function AdminPanel({
   isOpen,
   onClose
 }: AdminPanelProps) {
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'coupons' | 'config'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'config'>('orders');
 
   // Products tab helpers State
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -49,17 +45,6 @@ export default function AdminPanel({
     isBestSeller: false,
     ingredients: [],
     availableToppings: []
-  });
-
-  // Coupons tab state
-  const [isAddingCoupon, setIsAddingCoupon] = useState(false);
-  const [couponForm, setCouponForm] = useState<Partial<Coupon>>({
-    code: '',
-    discountType: 'percentage',
-    value: 0,
-    minOrderValue: 0,
-    isActive: true,
-    description: ''
   });
 
   if (!isOpen) return null;
@@ -122,36 +107,11 @@ export default function AdminPanel({
     setIsAddingProduct(false);
   };
 
-  // COUPON OPERATIONS
-  const handleSaveCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!couponForm.code || !couponForm.value) return;
-
-    const newCoupon: Coupon = {
-      code: couponForm.code.toUpperCase(),
-      discountType: couponForm.discountType || 'percentage',
-      value: Number(couponForm.value),
-      minOrderValue: Number(couponForm.minOrderValue || 0),
-      isActive: true,
-      description: couponForm.description || ''
-    };
-
-    onUpdateCoupons([...coupons, newCoupon]);
-    setIsAddingCoupon(false);
-    setCouponForm({ code: '', discountType: 'percentage', value: 0, minOrderValue: 0, isActive: true, description: '' });
-  };
-
-  const handleDeleteCoupon = (code: string) => {
-    if (confirm('Tem certeza que deseja desativar este cupom?')) {
-      onUpdateCoupons(coupons.map(c => c.code === code ? { ...c, isActive: false } : c));
-    }
-  };
-
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div 
         id="admin-panel-container"
-        className="bg-white dark:bg-zinc-900 rounded-3xl w-full max-w-5xl h-[85vh] overflow-hidden shadow-2xl flex flex-col border border-zinc-100 dark:border-zinc-800 animate-in fade-in duration-150"
+        className="bg-zinc-900 rounded-3xl w-full max-w-5xl h-[85vh] overflow-hidden shadow-2xl flex flex-col border border-zinc-800 animate-in fade-in duration-150"
       >
         {/* Header Admin */}
         <div className="p-4 bg-zinc-950 text-white flex items-center justify-between shrink-0">
@@ -171,20 +131,20 @@ export default function AdminPanel({
           <button 
             id="close-admin"
             onClick={onClose} 
-            className="p-1 px-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-350 hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer h-9 flex items-center justify-center"
+            className="p-1 px-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-xl text-xs font-bold transition-all cursor-pointer h-9 flex items-center justify-center"
           >
             Fechar Painel
           </button>
         </div>
 
         {/* Tab selector buttons */}
-        <div className="flex border-b border-zinc-150 dark:border-zinc-800 shrink-0 bg-zinc-50 dark:bg-zinc-950 px-3 overflow-x-auto whitespace-nowrap scrollbar-none">
+        <div className="flex border-b border-zinc-800 shrink-0 bg-zinc-950 px-3 overflow-x-auto whitespace-nowrap scrollbar-none">
           <button
             onClick={() => setActiveTab('orders')}
             className={`py-3.5 px-4 font-bold text-xs tracking-wider uppercase transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'orders'
                 ? 'border-amber-500 text-amber-600 dark:text-amber-400'
-                : 'border-transparent text-zinc-630 dark:text-zinc-405 hover:text-zinc-800'
+                : 'border-transparent text-zinc-400 hover:text-zinc-300'
             }`}
           >
             <Package2 className="w-4.5 h-4.5" />
@@ -196,7 +156,7 @@ export default function AdminPanel({
             className={`py-3.5 px-4 font-bold text-xs tracking-wider uppercase transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'products'
                 ? 'border-amber-500 text-amber-600 dark:text-amber-400'
-                : 'border-transparent text-zinc-630 dark:text-zinc-405 hover:text-zinc-800'
+                : 'border-transparent text-zinc-400 hover:text-zinc-300'
             }`}
           >
             <Store className="w-4.5 h-4.5" />
@@ -204,23 +164,11 @@ export default function AdminPanel({
           </button>
 
           <button
-            onClick={() => setActiveTab('coupons')}
-            className={`py-3.5 px-4 font-bold text-xs tracking-wider uppercase transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
-              activeTab === 'coupons'
-                ? 'border-amber-500 text-amber-600 dark:text-amber-400'
-                : 'border-transparent text-zinc-630 dark:text-zinc-405 hover:text-zinc-800'
-            }`}
-          >
-            <Tag className="w-4.5 h-4.5" />
-            Cupons Vigentes ({coupons.length})
-          </button>
-
-          <button
             onClick={() => setActiveTab('config')}
             className={`py-3.5 px-4 font-bold text-xs tracking-wider uppercase transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'config'
                 ? 'border-amber-500 text-amber-600 dark:text-amber-400'
-                : 'border-transparent text-zinc-630 dark:text-zinc-405 hover:text-zinc-800'
+                : 'border-transparent text-zinc-400 hover:text-zinc-300'
             }`}
           >
             <Truck className="w-4.5 h-4.5" />
@@ -252,9 +200,9 @@ export default function AdminPanel({
                   {[...orders].reverse().map((order) => (
                     <div 
                       key={order.id} 
-                      className="p-5 bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm"
+                      className="p-5 bg-zinc-900 border border-zinc-800 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm"
                     >
-                      <div className="space-y-1 bg-zinc-50 dark:bg-zinc-850 p-3 rounded-xl min-w-[200px]">
+                      <div className="space-y-1 bg-zinc-850 p-3 rounded-xl min-w-[200px]">
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-mono font-bold text-amber-600">#{order.orderNumber}</span>
                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full capitalize ${
@@ -264,7 +212,7 @@ export default function AdminPanel({
                             {order.status}
                           </span>
                         </div>
-                        <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-150 mt-1 truncate">{order.customer.name}</h4>
+                        <h4 className="font-bold text-sm text-white mt-1 truncate">{order.customer.name}</h4>
                         <p className="text-[11px] text-zinc-400">{order.customer.phone} • {order.items.reduce((s,i)=>s+i.quantity,0)}x pratos</p>
                       </div>
 
@@ -279,7 +227,7 @@ export default function AdminPanel({
                             </div>
                           ))}
                         </div>
-                        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/60 mt-2 flex justify-between font-bold text-zinc-900 dark:text-zinc-250 font-mono">
+                        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/60 mt-2 flex justify-between font-bold text-white font-mono">
                           <span>Total Geral do Cliente:</span>
                           <span className="text-amber-600 dark:text-amber-400">R$ {order.total.toFixed(2)}</span>
                         </div>
@@ -292,19 +240,19 @@ export default function AdminPanel({
                           <div className="flex gap-1.5">
                             <button
                               onClick={() => onUpdateOrderStatus(order.id, 'preparing')}
-                              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg cursor-pointer ${order.status === 'preparing' ? 'bg-blue-500 text-white' : 'bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300'}`}
+                              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg cursor-pointer ${order.status === 'preparing' ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-300'}`}
                             >
                               Preparar
                             </button>
                             <button
                               onClick={() => onUpdateOrderStatus(order.id, 'shipped')}
-                              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg cursor-pointer ${order.status === 'shipped' ? 'bg-amber-500 text-zinc-950' : 'bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300'}`}
+                              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg cursor-pointer ${order.status === 'shipped' ? 'bg-amber-500 text-zinc-950' : 'bg-zinc-800 text-zinc-300'}`}
                             >
                               Em Rota
                             </button>
                             <button
                               onClick={() => onUpdateOrderStatus(order.id, 'delivered')}
-                              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg cursor-pointer ${order.status === 'delivered' ? 'bg-emerald-600 text-white' : 'bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300'}`}
+                              className={`px-3 py-1.5 text-[11px] font-bold rounded-lg cursor-pointer ${order.status === 'delivered' ? 'bg-emerald-600 text-white' : 'bg-zinc-800 text-zinc-300'}`}
                             >
                               Entregue
                             </button>
@@ -352,13 +300,13 @@ export default function AdminPanel({
                         required
                         value={productForm.name}
                         onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
+                        className="bg-zinc-900 border border-zinc-800 px-3 py-2 rounded-xl text-xs text-white"
                       />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs font-bold text-zinc-500">Categorias (marque uma ou mais)</label>
-                      <div className="grid grid-cols-2 gap-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs">
+                      <div className="grid grid-cols-2 gap-1.5 bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs">
                         {['Destaques', 'Entradas', 'Hots', 'Salmão', 'Temaki', 'Sushis', 'Combos', 'Pokes', 'Especiais', 'Bebidas'].map(cat => {
                           const checked = (productForm.categories || []).includes(cat);
                           return (
@@ -389,7 +337,7 @@ export default function AdminPanel({
                         value={productForm.prepTime}
                         onChange={(e) => setProductForm({ ...productForm, prepTime: e.target.value })}
                         placeholder="Ex: 15-20 min"
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
+                        className="bg-zinc-900 border border-zinc-800 px-3 py-2 rounded-xl text-xs text-white"
                       />
                     </div>
 
@@ -402,7 +350,7 @@ export default function AdminPanel({
                         value={productForm.price || ''}
                         onChange={(e) => setProductForm({ ...productForm, price: parseFloat(e.target.value) })}
                         placeholder="42.00"
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
+                        className="bg-zinc-900 border border-zinc-800 px-3 py-2 rounded-xl text-xs text-white"
                       />
                     </div>
 
@@ -414,7 +362,7 @@ export default function AdminPanel({
                         value={productForm.promoPrice || ''}
                         onChange={(e) => setProductForm({ ...productForm, promoPrice: e.target.value ? parseFloat(e.target.value) : undefined })}
                         placeholder="38.90"
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
+                        className="bg-zinc-900 border border-zinc-800 px-3 py-2 rounded-xl text-xs text-white"
                       />
                     </div>
 
@@ -424,7 +372,7 @@ export default function AdminPanel({
                         type="text"
                         value={productForm.image}
                         onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-805 text-zinc-900 dark:text-white"
+                        className="bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-805 text-zinc-900 dark:text-white"
                       />
                     </div>
 
@@ -434,7 +382,7 @@ export default function AdminPanel({
                         value={productForm.description}
                         onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
                         rows={2}
-                        className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 p-3 rounded-2xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
+                        className="w-full bg-zinc-900 border border-zinc-800 p-3 rounded-2xl text-xs text-white"
                       />
                     </div>
                   </div>
@@ -446,7 +394,7 @@ export default function AdminPanel({
                         setIsAddingProduct(false);
                         setEditingProduct(null);
                       }}
-                      className="bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 text-zinc-700 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer"
+                      className="bg-zinc-800 text-zinc-300 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer"
                     >
                       Cancelar
                     </button>
@@ -463,7 +411,7 @@ export default function AdminPanel({
               {/* Items Inventory visual lists block */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {products.map((item) => (
-                  <div key={item.id} className="p-4 bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800 rounded-2xl flex justify-between items-center gap-4">
+                  <div key={item.id} className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl flex justify-between items-center gap-4">
                     <div className="flex items-center gap-3">
                       <img 
                         src={item.image} 
@@ -472,7 +420,7 @@ export default function AdminPanel({
                         referrerPolicy="no-referrer"
                       />
                       <div>
-                        <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded mr-1.5">{item.categories?.join(', ') || 'Sem categoria'}</span>
+                        <span className="text-[10px] bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded mr-1.5">{item.categories?.join(', ') || 'Sem categoria'}</span>
                         <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 inline">{item.name}</h4>
                         <div className="text-xs text-zinc-500 font-mono mt-0.5">
                           {item.promoPrice ? (
@@ -490,14 +438,14 @@ export default function AdminPanel({
                     <div className="flex gap-1">
                       <button
                         onClick={() => handleEditProductClick(item)}
-                        className="bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 p-2 rounded-lg text-zinc-640"
+                        className="bg-zinc-800 text-zinc-300 p-2 rounded-lg"
                         title="Editar"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteProduct(item.id)}
-                        className="bg-zinc-100 hover:bg-red-500 hover:text-white dark:bg-zinc-800 p-2 rounded-lg text-red-500 transition-colors"
+                        className="bg-zinc-800 hover:bg-red-500 hover:text-white p-2 rounded-lg text-red-500"
                         title="Deletar"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -509,154 +457,17 @@ export default function AdminPanel({
             </div>
           )}
 
-          {/* TAB 3: COUPONS LIST & REDEEMING PARAMETERS CRUD */}
-          {activeTab === 'coupons' && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest block">Cupons de Desconto Configurados</span>
-                {!isAddingCoupon && (
-                  <button
-                    onClick={() => setIsAddingCoupon(true)}
-                    className="bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-sm cursor-pointer"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Novo Cupom
-                  </button>
-                )}
-              </div>
-
-              {/* Add form coupon inline */}
-              {isAddingCoupon && (
-                <form onSubmit={handleSaveCoupon} className="p-4 border border-amber-500/20 bg-amber-500/5 rounded-2xl space-y-4">
-                  <h4 className="font-bold text-xs uppercase text-zinc-800 dark:text-zinc-205">Configurar Novo Voucher</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-zinc-500">Código Cupom (EX: BURGER30)</label>
-                      <input
-                        type="text"
-                        required
-                        value={couponForm.code}
-                        onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value.toUpperCase() })}
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-909 dark:text-white"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-zinc-500">Tipo de Abatimento</label>
-                      <select
-                        value={couponForm.discountType}
-                        onChange={(e) => setCouponForm({ ...couponForm, discountType: e.target.value as any })}
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-909 dark:text-white"
-                      >
-                        <option value="percentage">Porcentagem (%)</option>
-                        <option value="fixed">Fixo em Dinheiro (R$)</option>
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-zinc-500">Valor de Desconto</label>
-                      <input
-                        type="number"
-                        required
-                        value={couponForm.value || ''}
-                        onChange={(e) => setCouponForm({ ...couponForm, value: parseFloat(e.target.value) })}
-                        placeholder="15"
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-805 text-zinc-900 dark:text-white"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-zinc-500">Pedido Mínimo Obrigatório</label>
-                      <input
-                        type="number"
-                        value={couponForm.minOrderValue || ''}
-                        onChange={(e) => setCouponForm({ ...couponForm, minOrderValue: parseFloat(e.target.value) })}
-                        placeholder="50"
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-805 text-zinc-900 dark:text-white"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-1.5 md:col-span-4">
-                      <label className="text-xs font-bold text-zinc-500">Descrição Visual para Exibição</label>
-                      <input
-                        type="text"
-                        value={couponForm.description}
-                        onChange={(e) => setCouponForm({ ...couponForm, description: e.target.value })}
-                        placeholder="Ex: 10% de desconto para novos usuários em compras de R$40+"
-                        className="bg-white dark:bg-zinc-900 border border-zinc-200 px-3 py-2 rounded-xl text-xs dark:border-zinc-800 text-zinc-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 justify-end">
-                    <button
-                      type="button"
-                      onClick={() => setIsAddingCoupon(false)}
-                      className="bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-300 text-zinc-700 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-bold px-5 py-2 rounded-xl cursor-pointer"
-                    >
-                      Ativar Cupom
-                    </button>
-                  </div>
-                </form>
-              )}
-
-              {/* Coupons list */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {coupons.map((coupon) => (
-                  <div 
-                    key={coupon.code} 
-                    className={`p-4 bg-white dark:bg-zinc-900 border rounded-2xl flex flex-col justify-between ${
-                      coupon.isActive ? 'border-zinc-150 dark:border-zinc-800' : 'border-zinc-200 dark:border-zinc-800 opacity-60'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex justify-between items-start">
-                        <span className="font-mono font-extrabold text-sm tracking-widest text-amber-500">{coupon.code}</span>
-                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${
-                          coupon.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-zinc-100 text-zinc-400'
-                        }`}>
-                          {coupon.isActive ? 'Ativo' : 'Expirado'}
-                        </span>
-                      </div>
-                      
-                      <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mt-2 font-mono">
-                        {coupon.discountType === 'percentage' ? `${coupon.value}% de abatimento` : `R$ ${coupon.value.toFixed(2)} Off`}
-                      </p>
-                      <p className="text-[10px] text-zinc-505 mt-1 leading-relaxed">{coupon.description}</p>
-                    </div>
-
-                    {coupon.isActive && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteCoupon(coupon.code)}
-                        className="text-[10px] font-bold text-red-505 hover:underline text-left mt-3 cursor-pointer"
-                      >
-                        Desativar Cupom
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: STORE DEFINITIONS */}
+          {/* TAB 3: STORE DEFINITIONS */}
           {activeTab === 'config' && (
             <form onSubmit={(e) => { e.preventDefault(); alert('Definições operacionais mantidas!'); }} className="space-y-6">
               <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest block border-b border-zinc-100 dark:border-zinc-800 pb-2">Parâmetros Operacionais Loja</span>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Store status Open closed toggles */}
-                <div className="p-4 bg-zinc-50 dark:bg-zinc-850 border border-zinc-150 dark:border-zinc-800 rounded-2xl flex items-center justify-between">
+                <div className="p-4 bg-zinc-850 border border-zinc-150 dark:border-zinc-800 rounded-2xl flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200">Disponibilidade Restaurante</h4>
-                    <p className="text-xs text-zinc-405 mt-0.5 leading-relaxed">Dita se o cardápio aceita pedidos ou se exibe aviso de "FECHADO".</p>
+                    <p className="text-xs text-zinc-400 mt-0.5 leading-relaxed">Dita se o cardápio aceita pedidos ou se exibe aviso de "FECHADO".</p>
                   </div>
 
                   <button
@@ -679,58 +490,58 @@ export default function AdminPanel({
                 </div>
 
                 {/* Delivery Fee settings slider/fields */}
-                <div className="p-4 bg-zinc-50 dark:bg-zinc-850 border border-zinc-150 dark:border-zinc-800 rounded-2xl space-y-3">
+                <div className="p-4 bg-zinc-850 border border-zinc-150 dark:border-zinc-800 rounded-2xl space-y-3">
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200">Taxa do Delivery</h4>
-                    <p className="text-xs text-zinc-405 mt-0.5">Taxa de envio física cobrada por pedido padrão.</p>
+                    <p className="text-xs text-zinc-400 mt-0.5">Taxa de envio física cobrada por pedido padrão.</p>
                   </div>
 
                   <div className="relative max-w-[160px]">
-                    <span className="absolute left-3.5 top-3 text-xs font-bold text-zinc-450 font-mono">R$</span>
+                    <span className="absolute left-3.5 top-3 text-xs font-bold text-zinc-400 font-mono">R$</span>
                     <input
                       type="number"
                       step="0.01"
                       value={config.deliveryFee}
                       onChange={(e) => onUpdateConfig({ ...config, deliveryFee: parseFloat(e.target.value) })}
-                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-mono font-bold"
+                      className="w-full bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-mono font-bold"
                     />
                   </div>
                 </div>
 
                 {/* Free shipping boundary thresholds */}
-                <div className="p-4 bg-zinc-50 dark:bg-zinc-850 border border-zinc-152 dark:border-zinc-800 rounded-2xl space-y-3">
+                <div className="p-4 bg-zinc-850 border border-zinc-152 dark:border-zinc-800 rounded-2xl space-y-3">
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200">Gatilho de Frete Grátis</h4>
-                    <p className="text-xs text-zinc-405 mt-0.5">O cliente ganha frete ao ultrapassar este valor.</p>
+                    <p className="text-xs text-zinc-400 mt-0.5">O cliente ganha frete ao ultrapassar este valor.</p>
                   </div>
 
                   <div className="relative max-w-[160px]">
-                    <span className="absolute left-3.5 top-3 text-xs font-bold text-zinc-450 font-mono">R$</span>
+                    <span className="absolute left-3.5 top-3 text-xs font-bold text-zinc-400 font-mono">R$</span>
                     <input
                       type="number"
                       step="0.01"
                       value={config.freeShippingThresh || ''}
                       onChange={(e) => onUpdateConfig({ ...config, freeShippingThresh: parseFloat(e.target.value) })}
-                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-mono font-bold"
+                      className="w-full bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-mono font-bold"
                     />
                   </div>
                 </div>
 
                 {/* Minimun order constraints values */}
-                <div className="p-4 bg-zinc-50 dark:bg-zinc-850 border border-zinc-152 dark:border-zinc-800 rounded-2xl space-y-3">
+                <div className="p-4 bg-zinc-850 border border-zinc-152 dark:border-zinc-800 rounded-2xl space-y-3">
                   <div>
                     <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200">Pedido Mínimo Ativo</h4>
-                    <p className="text-xs text-zinc-405 mt-0.5">O checkout se bloqueia caso o carrinho tenha menos do que isso.</p>
+                    <p className="text-xs text-zinc-400 mt-0.5">O checkout se bloqueia caso o carrinho tenha menos do que isso.</p>
                   </div>
 
                   <div className="relative max-w-[160px]">
-                    <span className="absolute left-3.5 top-3 text-xs font-bold text-zinc-450 font-mono">R$</span>
+                    <span className="absolute left-3.5 top-3 text-xs font-bold text-zinc-400 font-mono">R$</span>
                     <input
                       type="number"
                       step="0.01"
                       value={config.minOrder}
                       onChange={(e) => onUpdateConfig({ ...config, minOrder: parseFloat(e.target.value) })}
-                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-mono font-bold"
+                      className="w-full bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-9 pr-4 text-xs font-mono font-bold"
                     />
                   </div>
                 </div>

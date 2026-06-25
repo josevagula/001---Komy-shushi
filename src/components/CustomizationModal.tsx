@@ -121,10 +121,10 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div 
         id="customization-modal-container"
-        className="bg-white dark:bg-[#0F0F0F] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border border-zinc-100 dark:border-white/10 animate-in fade-in zoom-in-95 duration-150"
+        className="bg-[#0F0F0F] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border border-white/10 animate-in fade-in zoom-in-95 duration-150"
       >
         {/* Header Banner */}
-        <div className="relative h-44 bg-zinc-100 dark:bg-zinc-800 shrink-0">
+        <div className="relative h-44 bg-zinc-800 shrink-0">
           <img 
             src={product.image} 
             alt={product.name} 
@@ -171,8 +171,8 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
                       onClick={() => handleRemovalToggle(ingredient)}
                       className={`text-xs px-3.5 py-2 rounded-xl font-medium border transition-all cursor-pointer flex items-center gap-1.5 ${
                         isRemoved
-                          ? 'bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/40 line-through'
-                          : 'bg-zinc-50 dark:bg-zinc-850 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300'
+                          ? 'bg-red-950/20 text-red-400 border-red-900/40 line-through'
+                          : 'bg-zinc-850 text-zinc-300 border-zinc-800 hover:border-zinc-300'
                       }`}
                     >
                       {isRemoved ? 'Remover ' : ''}{ingredient}
@@ -197,7 +197,7 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
                 {toppings.map((topping) => (
                   <div 
                     key={topping.id} 
-                    className="flex items-center justify-between p-3 rounded-2xl bg-zinc-50 dark:bg-[#0A0A0A] border border-zinc-100 dark:border-white/5 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-2xl bg-[#0A0A0A] border border-white/5 transition-colors"
                   >
                     <div>
                       <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-200">{topping.name}</span>
@@ -211,18 +211,18 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
                         type="button"
                         onClick={() => handleToppingQtyChange(topping.id, -1)}
                         disabled={topping.quantity === 0}
-                        className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-650 dark:text-zinc-300 flex items-center justify-center hover:bg-zinc-100 disabled:opacity-40 transition-colors cursor-pointer"
+                        className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 flex items-center justify-center hover:bg-zinc-800 disabled:opacity-40 transition-colors cursor-pointer"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="font-bold text-sm w-4 text-center text-zinc-900 dark:text-zinc-100 font-mono">
+                      <span className="font-bold text-sm w-4 text-center text-zinc-100 font-mono">
                         {topping.quantity}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleToppingQtyChange(topping.id, 1)}
                         disabled={topping.quantity >= (topping.maxQuantity || 5)}
-                        className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-650 dark:text-zinc-300 flex items-center justify-center hover:bg-amber-500 hover:text-zinc-950 disabled:opacity-40 transition-colors cursor-pointer"
+                        className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 flex items-center justify-center hover:bg-amber-500 hover:text-zinc-950 disabled:opacity-40 transition-colors cursor-pointer"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -244,17 +244,17 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
               onChange={(e) => setSpecialInstructions(e.target.value)}
               placeholder="Ex: Ponto da carne mal passado, extra molho verde, mandar sachê de geleia de pimenta..."
               maxLength={140}
-              className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 text-sm text-zinc-800 dark:text-zinc-200 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-colors placeholder:text-zinc-400"
+              className="w-full bg-zinc-850 border border-zinc-800 rounded-2xl p-3 text-sm text-zinc-200 outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 placeholder:text-zinc-400"
               rows={2}
             />
-            <div className="text-[10.5px] text-zinc-405 text-right font-mono mt-1">
+            <div className="text-[10.5px] text-zinc-400 text-right font-mono mt-1">
               {specialInstructions.length}/140 caracteres
             </div>
           </div>
         </div>
 
         {/* Footer Subtotal & Action Bar */}
-        <div className="p-4 bg-zinc-50 dark:bg-[#0A0A0A] border-t border-zinc-105 dark:border-white/5 shrink-0 space-y-3.5">
+        <div className="p-4 bg-[#0A0A0A] border-t border-white/5 shrink-0 space-y-3.5">
           <div className="flex items-center justify-between px-1">
             <div>
               <span className="text-xs text-zinc-400 block pb-0.5">Valor Unitário</span>
@@ -264,7 +264,7 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
             </div>
 
             {/* Overall quantity controller */}
-            <div className="flex items-center gap-3.5 bg-white dark:bg-[#0F0F0F] border border-zinc-200 dark:border-white/5 py-1.5 px-3.5 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-3.5 bg-[#0F0F0F] border border-white/5 py-1.5 px-3.5 rounded-2xl shadow-sm">
               <button
                 type="button"
                 onClick={() => setQuantity(q => Math.max(1, q - 1))}

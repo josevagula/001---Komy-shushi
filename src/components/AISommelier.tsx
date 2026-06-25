@@ -135,7 +135,7 @@ export default function AISommelier({ products, onAddProductDirectly, isOpen, on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white dark:bg-[#0F0F0F] border-l border-zinc-200 dark:border-white/10 shadow-2xl z-50 flex flex-col transition-all duration-300">
+    <div className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-[#0F0F0F] border-l border-white/10 shadow-2xl z-50 flex flex-col transition-all duration-300">
       {/* Header */}
       <div className="p-4 bg-zinc-900 dark:bg-[#0A0A0A] text-white flex items-center justify-between border-b dark:border-white/5">
         <div className="flex items-center gap-2.5">
@@ -156,7 +156,7 @@ export default function AISommelier({ products, onAddProductDirectly, isOpen, on
       </div>
 
       {/* Messages View */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-50 dark:bg-[#0A0A0A]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0A0A0A]">
         <div className="p-3.5 bg-amber-50 dark:bg-[#0F0F0F] border border-amber-200/50 dark:border-white/5 rounded-xl flex gap-3 text-xs text-amber-800 dark:text-amber-300">
           <Sparkles className="w-5 h-5 text-amber-500 shrink-0" />
           <div>
@@ -170,7 +170,7 @@ export default function AISommelier({ products, onAddProductDirectly, isOpen, on
             <div className={`max-w-[85%] rounded-2xl p-3.5 shadow-sm text-sm ${
               msg.sender === 'user'
                 ? 'bg-amber-500 text-zinc-900 rounded-tr-none font-medium'
-                : 'bg-white dark:bg-[#121212] text-zinc-850 dark:text-zinc-200 border border-zinc-100 dark:border-white/5 rounded-tl-none'
+                : 'bg-[#121212] text-zinc-200 border border-white/5 rounded-tl-none'
             }`}>
               <div className="whitespace-pre-line leading-relaxed">
                 {msg.sender === 'chef' ? parseMessageText(msg.text) : msg.text}
@@ -186,13 +186,13 @@ export default function AISommelier({ products, onAddProductDirectly, isOpen, on
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white dark:bg-[#121212] border border-zinc-100 dark:border-white/5 rounded-2xl rounded-tl-none p-4 shadow-sm">
+            <div className="bg-[#121212] border border-white/5 rounded-2xl rounded-tl-none p-4 shadow-sm">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
                 <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                 <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-bounce"></span>
               </div>
-              <p className="text-xs text-zinc-405 mt-2 animate-pulse font-mono">Chef está digitando e selecionando ingredientes...</p>
+              <p className="text-xs text-zinc-400 mt-2 animate-pulse font-mono">Chef está digitando e selecionando ingredientes...</p>
             </div>
           </div>
         )}
@@ -201,12 +201,12 @@ export default function AISommelier({ products, onAddProductDirectly, isOpen, on
 
       {/* Suggestion tags for conversion */}
       {messages.length < 3 && !isLoading && (
-        <div className="px-4 py-2 bg-zinc-50 dark:bg-[#0A0A0A] border-t border-zinc-200/50 dark:border-white/5 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2">
+        <div className="px-4 py-2 bg-[#0A0A0A] border-t border-white/5 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2">
           {quickQuestions.map((q, i) => (
             <button
               key={i}
               onClick={() => handleSendMessage(q)}
-              className="text-xs bg-white dark:bg-[#0F0F0F] hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-white/5 text-zinc-700 dark:text-zinc-300 px-3 py-1.5 rounded-full shadow-sm transition-all flex items-center gap-1 shrink-0"
+              className="text-xs bg-[#0F0F0F] hover:bg-zinc-800 border border-white/5 text-zinc-300 px-3 py-1.5 rounded-full shadow-sm transition-all flex items-center gap-1 shrink-0"
             >
               <UtensilsCrossed className="w-3 h-3 text-amber-500" />
               {q}
@@ -216,19 +216,19 @@ export default function AISommelier({ products, onAddProductDirectly, isOpen, on
       )}
 
       {/* Send Input Footer */}
-      <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputValue); }} className="p-4 bg-white dark:bg-[#0F0F0F] border-t border-zinc-200 dark:border-white/5 flex items-center gap-2">
+      <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputValue); }} className="p-4 bg-[#0F0F0F] border-t border-white/5 flex items-center gap-2">
         <input
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Pergunte ao Chef (EX: 'O que harmoniza com refrigerante?')"
-          className="flex-1 bg-zinc-100 dark:bg-zinc-850 outline-none border border-zinc-200 dark:border-zinc-850 rounded-xl px-4 py-3 text-sm focus:border-amber-500 text-zinc-900 dark:text-white transition-colors"
+          className="flex-1 bg-zinc-850 outline-none border border-zinc-850 rounded-xl px-4 py-3 text-sm focus:border-amber-500 text-white"
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={!inputValue.trim() || isLoading}
-          className="bg-amber-500 disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 text-zinc-900 h-11 w-11 rounded-xl flex items-center justify-center hover:bg-amber-400 transition-colors cursor-pointer"
+          className="bg-amber-500 disabled:bg-zinc-800 disabled:text-zinc-400 text-zinc-900 h-11 w-11 rounded-xl flex items-center justify-center hover:bg-amber-400 transition-colors cursor-pointer"
         >
           <Send className="w-5 h-5" />
         </button>

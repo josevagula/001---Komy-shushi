@@ -52,15 +52,6 @@ export interface CartItem {
   totalPrice: number;
 }
 
-export interface Coupon {
-  code: string;
-  discountType: 'percentage' | 'fixed';
-  value: number;
-  minOrderValue?: number;
-  isActive: boolean;
-  description: string;
-}
-
 export interface CustomerInfo {
   name: string;
   phone: string;
@@ -91,8 +82,6 @@ export interface Order {
   changeNeededFor?: number; // only if paymentMethod is 'cash' and prompt is yes
   subtotal: number;
   deliveryFee: number;
-  couponApplied?: Coupon;
-  discount: number;
   total: number;
   status: 'pending' | 'preparing' | 'shipped' | 'delivered' | 'canceled';
 }

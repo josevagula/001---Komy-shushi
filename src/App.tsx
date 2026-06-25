@@ -6,12 +6,12 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Search, Star, Clock, ShoppingBag, Bot, User, LayoutDashboard, Sparkles, Check, 
-  MapPin, DollarSign, Store, Phone, HelpCircle, Moon, Sun, ShoppingCart, Percent, 
+  MapPin, DollarSign, Store, Phone, HelpCircle, ShoppingCart, Percent, 
   ChevronRight, AlertCircle, Volume2
 } from 'lucide-react';
 
-import { Product, CartItem, Order, Coupon, RestaurantConfig } from './types';
-import { initialProducts, initialCoupons, initialRestaurantConfig } from './data/initialData';
+import { Product, CartItem, Order, RestaurantConfig } from './types';
+import { initialProducts, initialRestaurantConfig } from './data/initialData';
 
 // Component imports
 import ProductCard from './components/ProductCard';
@@ -21,12 +21,6 @@ import CheckoutView from './components/CheckoutView';
 import OrderConfirmation from './components/OrderConfirmation';
 
 export default function App() {
-  // Theme state
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    const saved = localStorage.getItem('komy-sushi-theme');
-    return saved === 'dark';
-  });
-
   // Business core states
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('komy-sushi-products');
@@ -50,11 +44,6 @@ export default function App() {
       return p;
     });
     return migrated;
-  });
-
-  const [coupons, setCoupons] = useState<Coupon[]>(() => {
-    const saved = localStorage.getItem('komy-sushi-coupons');
-    return saved ? JSON.parse(saved) : initialCoupons;
   });
 
   const [config, setConfig] = useState<RestaurantConfig>(() => {
@@ -81,7 +70,7 @@ export default function App() {
   const [editingCartItem, setEditingCartItem] = useState<CartItem | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Destaques');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+
 
   // Modal / Sidebar triggers
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -109,11 +98,12 @@ export default function App() {
     }
 
     // Force sync of initial banner or config changes if needed
-    if (config.banner !== initialRestaurantConfig.banner || config.deliveryTime !== initialRestaurantConfig.deliveryTime) {
+    if (config.banner !== initialRestaurantConfig.banner || config.deliveryTime !== initialRestaurantConfig.deliveryTime || config.minOrder !== initialRestaurantConfig.minOrder) {
       setConfig(prev => ({ 
         ...prev, 
         banner: initialRestaurantConfig.banner,
-        deliveryTime: initialRestaurantConfig.deliveryTime 
+        deliveryTime: initialRestaurantConfig.deliveryTime,
+        minOrder: initialRestaurantConfig.minOrder
       }));
     }
   }, []);
@@ -121,10 +111,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('komy-sushi-products', JSON.stringify(products));
   }, [products]);
-
-  useEffect(() => {
-    localStorage.setItem('komy-sushi-coupons', JSON.stringify(coupons));
-  }, [coupons]);
 
   useEffect(() => {
     localStorage.setItem('komy-sushi-config', JSON.stringify(config));
@@ -138,16 +124,6 @@ export default function App() {
     localStorage.setItem('komy-sushi-orders', JSON.stringify(orders));
   }, [orders]);
 
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (darkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('komy-sushi-theme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('komy-sushi-theme', 'light');
-    }
-  }, [darkMode]);
   
   // Helper to check if the store is open based strictly on schedule
   // Open 24/7 every day
@@ -189,20 +165,32 @@ export default function App() {
   // Cart operations
   const handleAddOrUpdateCart = (customizedItem: CartItem) => {
     setCart(prev => {
-      const idx = prev.findIndex(item => item.cartId === customizedItem.cartId);
-      if (idx > -1) {
-        // Edit item customization
+      const exactIdx = prev.findIndex(item => item.cartId === customizedItem.cartId);
+      if (exactIdx > -1) {
         const next = [...prev];
-        next[idx] = customizedItem;
+        next[exactIdx] = customizedItem;
         return next;
-      } else {
-        // Add completely new customized item
-        return [...prev, customizedItem];
       }
+      const sameProduct = prev.findIndex(item =>
+        item.product.id === customizedItem.product.id &&
+        JSON.stringify(item.addedToppings) === JSON.stringify(customizedItem.addedToppings) &&
+        JSON.stringify(item.removedIngredients) === JSON.stringify(customizedItem.removedIngredients) &&
+        item.specialInstructions === customizedItem.specialInstructions
+      );
+      if (sameProduct > -1) {
+        const next = [...prev];
+        next[sameProduct] = {
+          ...next[sameProduct],
+          quantity: next[sameProduct].quantity + customizedItem.quantity,
+          totalPrice: next[sameProduct].unitPrice * (next[sameProduct].quantity + customizedItem.quantity)
+        };
+        return next;
+      }
+      return [...prev, customizedItem];
     });
     setSelectedProduct(null);
     setEditingCartItem(null);
-    setIsCartOpen(true); // Open drawer instantly to show item was added successfully!
+    setIsCartOpen(true);
   };
 
   const handleUpdateCartQty = (cartId: string, nextQty: number) => {
@@ -236,21 +224,9 @@ export default function App() {
   const cartSubtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
 
   const isFreeDeliveryThresholdMet = config.freeShippingThresh ? cartSubtotal >= config.freeShippingThresh : false;
-  const isFreeDeliveryCoupon = appliedCoupon?.code === 'FRETEGRATIS' && cartSubtotal >= (appliedCoupon.minOrderValue || 0);
-  const calculatedDeliveryFee = (isFreeDeliveryThresholdMet || isFreeDeliveryCoupon) ? 0 : config.deliveryFee;
+  const calculatedDeliveryFee = isFreeDeliveryThresholdMet ? 0 : config.deliveryFee;
 
-  let calculatedDiscount = 0;
-  if (appliedCoupon && appliedCoupon.isActive) {
-    if (cartSubtotal >= (appliedCoupon.minOrderValue || 0)) {
-      if (appliedCoupon.discountType === 'percentage') {
-        calculatedDiscount = cartSubtotal * (appliedCoupon.value / 100);
-      } else if (appliedCoupon.discountType === 'fixed') {
-        calculatedDiscount = appliedCoupon.value;
-      }
-    }
-  }
-
-  const grandTotal = Math.max(0, cartSubtotal + calculatedDeliveryFee - calculatedDiscount);
+  const grandTotal = cartSubtotal + calculatedDeliveryFee;
 
   // Confirm order processing and checkout final transition
   const handleCompleteOrderDispatch = (formData: {
@@ -275,8 +251,6 @@ export default function App() {
       changeNeededFor: formData.changeNeededFor,
       subtotal: cartSubtotal,
       deliveryFee: calculatedDeliveryFee,
-      couponApplied: appliedCoupon || undefined,
-      discount: calculatedDiscount,
       total: grandTotal,
       status: 'pending'
     };
@@ -284,7 +258,6 @@ export default function App() {
     setOrders(prev => [...prev, finalizedOrder]);
     setCurrentOrder(finalizedOrder);
     setCart([]); // Clear cart
-    setAppliedCoupon(null);
     setIsCheckoutView(false);
   };
 
@@ -292,7 +265,6 @@ export default function App() {
     setCurrentOrder(null);
     setIsCheckoutView(false);
     setCart([]);
-    setAppliedCoupon(null);
   };
 
   // Filtered menu display list
@@ -311,10 +283,10 @@ export default function App() {
     });
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#0A0A0A] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans transition-colors duration-200">
+    <div className="min-h-screen bg-[#0A0A0A] text-zinc-100 flex flex-col font-sans">
       
       {/* NAVBAR */}
-      <header className="sticky top-0 bg-white/95 dark:bg-[#121212]/80 backdrop-blur-md border-b border-zinc-150 dark:border-white/10 z-40 transition-colors">
+      <header className="sticky top-0 bg-[#121212]/80 backdrop-blur-md border-b border-white/10 z-40">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           
           {/* Logo & title brand */}
@@ -328,26 +300,17 @@ export default function App() {
               />
             </div>
             <div>
-              <h1 className="font-black text-sm tracking-widest text-zinc-950 dark:text-white uppercase leading-none">
+              <h1 className="font-black text-sm tracking-widest text-white uppercase leading-none">
                 {config.name}
               </h1>
               <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono tracking-wide mt-0.5 block">
-                DELIVERY PREMIUM • CARDÁPIO DIGITAL
+                DELIVERY • CARDÁPIO DIGITAL
               </span>
             </div>
           </div>
 
           {/* Quick Operations toolbar */}
           <div className="flex items-center gap-2.5">
-            {/* Dark Light toggler */}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-850 dark:hover:bg-zinc-800 text-zinc-650 dark:text-zinc-300 transition-colors cursor-pointer"
-              title="Trocar Tema Visual"
-            >
-              {darkMode ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5 text-zinc-800" />}
-            </button>
-
             {/* Cart Button wrapper */}
             {cart.length > 0 && !isCheckoutView && !currentOrder && (
               <button
@@ -380,9 +343,7 @@ export default function App() {
             cart={cart}
             subtotal={cartSubtotal}
             deliveryFee={calculatedDeliveryFee}
-            discount={calculatedDiscount}
             total={grandTotal}
-            appliedCoupon={appliedCoupon}
             onBackToCart={() => {
               setIsCheckoutView(false);
               setIsCartOpen(true);
@@ -396,7 +357,7 @@ export default function App() {
             
             {/* HERO RESTAURANT BANNER */}
             <section className="max-w-7xl mx-auto px-4 mt-6">
-              <div className="relative w-full h-60 md:h-80 bg-zinc-950 rounded-3xl overflow-hidden shadow-xl border border-zinc-150 dark:border-white/5 group">
+              <div className="relative w-full h-60 md:h-80 bg-zinc-950 rounded-3xl overflow-hidden shadow-xl border border-white/5 group">
                 <img 
                   src={config.banner} 
                   alt="Banner Comercial" 
@@ -436,7 +397,7 @@ export default function App() {
                   </div>
 
                   {/* Info Pills values strip */}
-                  <div className="flex flex-wrap gap-2.5 bg-white/95 dark:bg-[#0F0F0F]/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-zinc-200/50 dark:border-white/5 text-zinc-850 dark:text-zinc-200 text-xs font-semibold">
+                  <div className="flex flex-wrap gap-2.5 bg-[#0F0F0F]/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/5 text-zinc-200 text-xs font-semibold">
                     <div className="flex items-center gap-1">
                       <Clock className="w-4 h-4 text-amber-500 animate-pulse" />
                       <span>{config.deliveryTime}</span>
@@ -452,8 +413,8 @@ export default function App() {
             </section>
 
             {/* CATEGORIES NAVIGATION MENU PILLS */}
-            <section className="max-w-7xl mx-auto px-4 sticky top-16 bg-zinc-50/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md py-4 z-30 border-b border-zinc-150 dark:border-white/5 transition-colors">
-              <div className="flex gap-2 bg-zinc-100 dark:bg-[#0F0F0F] p-1.5 rounded-2xl border dark:border-white/5 select-none overflow-x-auto whitespace-nowrap scrollbar-none">
+            <section className="max-w-7xl mx-auto px-4 sticky top-16 bg-[#0A0A0A]/80 backdrop-blur-md py-4 z-30 border-b border-white/5">
+              <div className="flex gap-2 bg-[#0F0F0F] p-1.5 rounded-2xl border border-white/5 select-none overflow-x-auto whitespace-nowrap scrollbar-none">
                 {categoriesList.map((cat) => {
                   const isActive = activeCategory.toLowerCase() === cat.name.toLowerCase();
                   return (
@@ -463,7 +424,7 @@ export default function App() {
                       className={`px-4.5 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                         isActive
                           ? 'bg-amber-500 text-zinc-950 font-black shadow-md scale-102'
-                          : 'text-zinc-640 dark:text-zinc-405 hover:bg-zinc-200 dark:hover:bg-zinc-800'
+                          : 'text-zinc-400 hover:bg-zinc-800'
                       }`}
                     >
                       <span className="text-base leading-none">{cat.icon}</span>
@@ -480,7 +441,7 @@ export default function App() {
               {/* Filter details sub-header search bar */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-extrabold text-zinc-950 dark:text-white capitalize flex items-center gap-1.5">
+                  <h3 className="text-lg font-extrabold text-white capitalize flex items-center gap-1.5">
                     {categoriesList.find(c=>c.name.toLowerCase() === activeCategory.toLowerCase())?.icon || '🍣'} {activeCategory}
                   </h3>
                   <p className="text-zinc-500 text-xs mt-0.5">
@@ -498,7 +459,7 @@ export default function App() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Pesquisar no cardápio..."
-                    className="w-full bg-white dark:bg-[#0F0F0F] border border-zinc-200 dark:border-white/5 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-zinc-900 dark:text-white focus:border-amber-500 outline-none transition-all placeholder:text-zinc-400 font-medium"
+                    className="w-full bg-[#0F0F0F] border border-white/5 rounded-2xl py-2.5 pl-10 pr-4 text-xs text-white focus:border-amber-500 outline-none placeholder:text-zinc-400 font-medium"
                   />
                   {searchQuery && (
                     <button 
@@ -513,13 +474,13 @@ export default function App() {
 
               {/* Items listing card grid */}
               {displayedProducts.length === 0 ? (
-                <div className="p-14 text-center bg-white dark:bg-[#0F0F0F] border border-zinc-150 dark:border-white/5 rounded-3xl space-y-3.5">
-                  <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 mx-auto">
+                <div className="p-14 text-center bg-[#0F0F0F] border border-white/5 rounded-3xl space-y-3.5">
+                  <div className="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 mx-auto">
                     <Search className="w-8 h-8" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-zinc-800 dark:text-zinc-200">Nenhum resultado encontrado</h4>
-                    <p className="text-xs text-zinc-450 mt-1 max-w-sm mx-auto">
+                    <h4 className="font-bold text-zinc-200">Nenhum resultado encontrado</h4>
+                    <p className="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
                       Não encontramos pratos correspondentes aos filtros em "{activeCategory}". Tente outra pesquisa ou explore as abas acima.
                     </p>
                   </div>
@@ -585,7 +546,6 @@ export default function App() {
       <CartDrawer
         cart={cart}
         config={config}
-        coupons={coupons}
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         onUpdateQty={handleUpdateCartQty}
@@ -595,8 +555,6 @@ export default function App() {
           setIsCartOpen(false);
           setIsCheckoutView(true);
         }}
-        appliedCoupon={appliedCoupon}
-        onApplyCoupon={setAppliedCoupon}
         isStoreOpen={isStoreOpen}
       />
 

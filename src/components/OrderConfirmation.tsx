@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Send, CheckCircle2, Ticket, Printer, Clock, Share2, Clipboard, ArrowLeft, Check } from 'lucide-react';
+import { Send, CheckCircle2, Clock, ArrowLeft } from 'lucide-react';
 import { Order, RestaurantConfig } from '../types';
 
 interface OrderConfirmationProps {
@@ -45,9 +45,6 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
 
     text += `${divider}${line}`;
     text += `💰 *EXTRATO FINANCEIRO:*${line}`;
-    if (order.discount > 0) {
-      text += `Desconto Cupom: - R$ ${order.discount.toFixed(2).replace('.', ',')}${line}`;
-    }
     text += `*TOTAL A PAGAR: R$ ${order.total.toFixed(2).replace('.', ',')}*${line}`;
     text += `${divider}${line}${line}`;
 
@@ -104,12 +101,12 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
       </div>
 
       {/* TORN PHYSICAL RECEIPTS INSPIRED CONTAINER */}
-      <div className="relative bg-zinc-50 dark:bg-zinc-850/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 text-left shadow-lg overflow-hidden font-mono text-zinc-800 dark:text-zinc-200">
+      <div className="relative bg-zinc-850/40 border border-zinc-800 rounded-3xl p-6 text-left shadow-lg overflow-hidden font-mono text-zinc-200">
         
         {/* Torn visual edges simulation top */}
-        <div className="absolute top-0 inset-x-0 h-1.5 flex gap-1 bg-white dark:bg-zinc-900">
+        <div className="absolute top-0 inset-x-0 h-1.5 flex gap-1 bg-zinc-900">
           {Array.from({ length: 24 }).map((_, i) => (
-            <div key={i} className="flex-1 bg-zinc-50 dark:bg-zinc-850/40 border-b border-zinc-200 dark:border-zinc-800 aspect-square rounded-full -translate-y-[45%]" />
+            <div key={i} className="flex-1 bg-zinc-850/40 border-b border-zinc-800 aspect-square rounded-full -translate-y-[45%]" />
           ))}
         </div>
 
@@ -121,7 +118,7 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
 
         {/* Sections items details list */}
         <div className="py-4 border-b border-dashed border-zinc-300 dark:border-zinc-700/60 space-y-3">
-          <span className="text-[10.5px] font-bold uppercase text-zinc-405 tracking-wider block">ITENS DO HISTÓRICO:</span>
+          <span className="text-[10.5px] font-bold uppercase text-zinc-400 tracking-wider block">ITENS DO HISTÓRICO:</span>
           {order.items.map((item) => (
             <div key={item.cartId} className="flex justify-between items-start text-xs">
               <div className="min-w-0 pr-4">
@@ -176,12 +173,6 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
             <span>Subtotal</span>
             <span>R$ {order.subtotal.toFixed(2).replace('.', ',')}</span>
           </div>
-          {order.discount > 0 && (
-            <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold animate-pulse">
-              <span>Desconto</span>
-              <span>- R$ {order.discount.toFixed(2).replace('.', ',')}</span>
-            </div>
-          )}
           <div className="flex justify-between text-zinc-900 dark:text-white font-extrabold text-sm pt-2 border-t border-dotted border-zinc-300 dark:border-zinc-750">
             <span>TOTAL LIQUIDO</span>
             <span className="font-bold font-mono text-amber-600 dark:text-amber-400">R$ {order.total.toFixed(2).replace('.', ',')}</span>
@@ -193,9 +184,9 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
         </div>
 
         {/* Torn visual edges simulation bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-1.5 flex gap-1 bg-white dark:bg-zinc-900">
+        <div className="absolute bottom-0 inset-x-0 h-1.5 flex gap-1 bg-zinc-900">
           {Array.from({ length: 24 }).map((_, i) => (
-            <div key={i} className="flex-1 bg-zinc-50 dark:bg-zinc-850/40 border-t border-zinc-205 dark:border-zinc-800 aspect-square rounded-full translate-y-[45%]" />
+            <div key={i} className="flex-1 bg-zinc-850/40 border-t border-zinc-800 aspect-square rounded-full translate-y-[45%]" />
           ))}
         </div>
       </div>
@@ -227,7 +218,7 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
         <Clock className="w-5 h-5 text-amber-500 shrink-0" />
         <div className="text-left leading-relaxed">
           <span className="font-bold block">Tempo de Entrega Estimado:</span>
-          {config.deliveryTime} para a entrega.
+          {config.deliveryTime} a partir das 19h.
         </div>
       </div>
     </div>
