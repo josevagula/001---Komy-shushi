@@ -7,7 +7,7 @@ import { Product, RestaurantConfig } from '../types';
 
 export const initialRestaurantConfig: RestaurantConfig = {
   name: "KOMY SUSHI",
-  logo: "/images/logo.jpeg",
+  logo: "/images/logo-transparente.png",
   banner: "/images/sushi_banner_premium_dark_1781131159755.png",
   description: "Sabor autêntico e frescor incomparável. Sushis e combinados premium preparados com maestria para a melhor experiência na sua casa.",
   rating: 5.0,
