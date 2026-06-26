@@ -44,7 +44,8 @@ export default function AdminPanel({
     prepTime: '20-25 min',
     isBestSeller: false,
     ingredients: [],
-    availableToppings: []
+    availableToppings: [],
+    customization: undefined
   });
 
   if (!isOpen) return null;
@@ -73,7 +74,8 @@ export default function AdminPanel({
         prepTime: productForm.prepTime || '20 min',
         isBestSeller: !!productForm.isBestSeller,
         ingredients: productForm.ingredients || ["Pão", "Carne"],
-        availableToppings: productForm.availableToppings || []
+        availableToppings: productForm.availableToppings || [],
+        customization: productForm.customization || { enabled: false }
       };
       onUpdateProducts([...products, newProduct]);
       setIsAddingProduct(false);
@@ -91,7 +93,8 @@ export default function AdminPanel({
       prepTime: '20 min',
       isBestSeller: false,
       ingredients: [],
-      availableToppings: []
+      availableToppings: [],
+      customization: undefined
     });
   };
 

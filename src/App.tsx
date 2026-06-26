@@ -80,31 +80,23 @@ export default function App() {
   // Persistence hooks
   useEffect(() => {
     const validCategorySet = new Set(['destaques', 'entradas', 'hots', 'salmão', 'salmao', 'temaki', 'sushis', 'combos', 'pokes', 'especiais', 'bebidas']);
-    const hasStaleCategories = products.some(p => {
+    const needsFix = products.some(p => {
       return !p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()));
     });
-    const hasOutdatedImages = products.some(p => {
-      const initial = initialProducts.find(ip => ip.id === p.id);
-      return initial && initial.image !== p.image;
-    });
-    const hasStaleCustomization = products.some(p => {
-      const initial = initialProducts.find(ip => ip.id === p.id);
-      return initial && JSON.stringify(initial.customization) !== JSON.stringify(p.customization);
-    });
 
-    if (hasStaleCategories || hasOutdatedImages || hasStaleCustomization || products.length !== initialProducts.length) {
-      setProducts(initialProducts);
-      localStorage.setItem('komy-sushi-products', JSON.stringify(initialProducts));
-    }
-
-    // Force sync of initial banner or config changes if needed
-    if (config.banner !== initialRestaurantConfig.banner || config.deliveryTime !== initialRestaurantConfig.deliveryTime || config.minOrder !== initialRestaurantConfig.minOrder) {
-      setConfig(prev => ({ 
-        ...prev, 
-        banner: initialRestaurantConfig.banner,
-        deliveryTime: initialRestaurantConfig.deliveryTime,
-        minOrder: initialRestaurantConfig.minOrder
-      }));
+    if (needsFix) {
+      const fixed = products.map(p => {
+        if (!p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()))) {
+          const initial = initialProducts.find(ip => ip.id === p.id);
+          if (initial) {
+            return { ...p, categories: initial.categories };
+          }
+        }
+        return p;
+      });
+      setProducts(fixed);
+      localStorage.setItem('komy-sushi-products', JSON.stringify(fixed));
+      return;
     }
   }, []);
 
