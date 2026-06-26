@@ -57,7 +57,7 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
         setToppings(initialToppings);
       }
     }
-  }, [isOpen, product, editItem, addableSource]);
+  }, [isOpen, product, editItem]);
 
   // Calculate prices dynamically
   const toppingsCost = (toppings || []).reduce((sum, t) => sum + (t.price * t.quantity), 0);
