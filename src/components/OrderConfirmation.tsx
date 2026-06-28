@@ -19,9 +19,9 @@ export default function OrderConfirmation({ order, config, onReset }: OrderConfi
   const generateWhatsappMessage = (): string => {
     const space = " ";
     const line = "\n";
-    const divider = "================================";
+    const divider = "============================";
 
-    let text = `🚨 *NOVO PEDIDO NO KOMY SUSHI* 🚨${line}`;
+    let text = `🚨 *NOVO PEDIDO NO KOMY SUSHI*${line}`;
     text += `${divider}${line}`;
     text += `*DATA:* ${order.date}${line}`;
     text += `${divider}${line}${line}`;
