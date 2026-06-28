@@ -43,7 +43,14 @@ export default function App() {
       }
       return p;
     });
-    return migrated;
+    const imageFix: Record<string, string> = {
+      'hot-1': '/images/Hot Holl.jpg',
+      'hot-6': '/images/Hot Temaki.jpg',
+      'hot-7': '/images/Hot Temaki sem Arroz.jpg',
+    };
+    return migrated.map(p =>
+      imageFix[p.id] ? { ...p, image: imageFix[p.id] } : p
+    ) as Product[];
   });
 
   const [config, setConfig] = useState<RestaurantConfig>(() => {
@@ -84,26 +91,9 @@ export default function App() {
       return !p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()));
     });
 
-    const needsImageFix = [
-      { id: 'hot-1', old: '/images/Hot Holl.png', new: '/images/Hot Holl.jpg' },
-      { id: 'hot-6', old: '/images/Hot Temaki.png', new: '/images/Hot Temaki.jpg' },
-      { id: 'hot-7', old: '/images/hot_temaki_no_rice_lying_table_1781055147154.png', new: '/images/Hot Temaki sem Arroz.jpg' },
-    ].some(({ id, old }) => {
-      const p = products.find(x => x.id === id);
-      return p && p.image === old;
-    });
-
-    if (needsFix || needsImageFix) {
-      const imageMap: Record<string, string> = {
-        'hot-1': '/images/Hot Holl.jpg',
-        'hot-6': '/images/Hot Temaki.jpg',
-        'hot-7': '/images/Hot Temaki sem Arroz.jpg',
-      };
+    if (needsFix) {
       const fixed = products.map(p => {
-        if (imageMap[p.id]) {
-          return { ...p, image: imageMap[p.id] };
-        }
-        if (needsFix && (!p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase())))) {
+        if (!p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()))) {
           const initial = initialProducts.find(ip => ip.id === p.id);
           if (initial) {
             return { ...p, categories: initial.categories };
