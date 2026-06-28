@@ -86,7 +86,7 @@ export const initialProducts: Product[] = [
     description: "Arroz, nori, salmão, cream cheese, cebolinha verde, molho tarê & pimenta bico",
     price: 36.99,
     categories: ["Hots"],
-    image: "/images/Hot Pimenta Bico.png",
+    image: "/images/Hot Pimenta Bico.jpg",
     rating: 5.0,
     prepTime: "20-25 min",
     ingredients: ["Arroz", "Nori", "Salmão", "Cream Cheese", "Cebolinha Verde", "Molho Tarê", "Pimenta Bico"],

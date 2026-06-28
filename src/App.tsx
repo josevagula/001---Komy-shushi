@@ -45,6 +45,7 @@ export default function App() {
     });
     const imageFix: Record<string, string> = {
       'hot-1': '/images/Hot Holl.jpg',
+      'hot-2': '/images/Hot Pimenta Bico.jpg',
       'hot-6': '/images/Hot Temaki.jpg',
       'hot-7': '/images/Hot Temaki sem Arroz.jpg',
       'temaki-2': '/images/Hot Temaki sem Arroz.jpg',
