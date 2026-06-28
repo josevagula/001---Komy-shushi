@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, Star, Clock, ShoppingBag, Bot, User, LayoutDashboard, Sparkles, Check, 
   MapPin, DollarSign, Store, Phone, HelpCircle, ShoppingCart, Percent, 
@@ -117,6 +117,40 @@ export default function App() {
   }, [orders]);
 
   
+  // ─── Mobile Back Button (Android) ─────────────────────────────────────────
+  const prevHasOverlay = useRef(false);
+
+  useEffect(() => {
+    const hasOverlay = !!(selectedProduct || isCartOpen || isCheckoutView || currentOrder);
+    if (hasOverlay && !prevHasOverlay.current) {
+      window.history.pushState(null, '');
+    }
+    prevHasOverlay.current = hasOverlay;
+  }, [selectedProduct, isCartOpen, isCheckoutView, currentOrder]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (selectedProduct) {
+        setSelectedProduct(null);
+        setEditingCartItem(null);
+        window.history.pushState(null, '');
+      } else if (isCartOpen) {
+        setIsCartOpen(false);
+        window.history.pushState(null, '');
+      } else if (isCheckoutView) {
+        setIsCheckoutView(false);
+        setIsCartOpen(true);
+        window.history.pushState(null, '');
+      } else if (currentOrder) {
+        setCurrentOrder(null);
+        window.history.pushState(null, '');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedProduct, isCartOpen, isCheckoutView, currentOrder]);
+
   // Helper to check if the store is open based strictly on schedule
   // Open 24/7 every day
   const isStoreOpenBySchedule = (): { isOpen: boolean; reason: string } => {
