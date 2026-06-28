@@ -35,7 +35,7 @@ export const initialProducts: Product[] = [
     description: "Arroz, nori, salmão, cream cheese, cebolinha verde e molho tarê",
     price: 36.99,
     categories: ["Destaques", "Hots"],
-    image: "/images/Hot Holl.png",
+    image: "/images/Hot Holl.jpg",
     rating: 5.0,
     prepTime: "20-25 min",
     isBestSeller: true,
