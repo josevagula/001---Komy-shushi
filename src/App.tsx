@@ -84,9 +84,15 @@ export default function App() {
       return !p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()));
     });
 
-    if (needsFix) {
+    const imageHotHoll = products.find(p => p.id === 'hot-1');
+    const needsImageFix = imageHotHoll && imageHotHoll.image === '/images/Hot Holl.png';
+
+    if (needsFix || needsImageFix) {
       const fixed = products.map(p => {
-        if (!p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase()))) {
+        if (needsImageFix && p.id === 'hot-1') {
+          return { ...p, image: '/images/Hot Holl.jpg' };
+        }
+        if (needsFix && (!p.categories || p.categories.length === 0 || p.categories.some(c => !validCategorySet.has(c.toLowerCase())))) {
           const initial = initialProducts.find(ip => ip.id === p.id);
           if (initial) {
             return { ...p, categories: initial.categories };
