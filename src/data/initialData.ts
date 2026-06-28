@@ -261,7 +261,7 @@ export const initialProducts: Product[] = [
     description: "Nori, salmão, gergelim, cebolinha verde & molho tarê",
     price: 39.99,
     categories: ["Temaki"],
-    image: "/images/hot_temaki_no_rice_lying_table_1781055147154.png",
+    image: "/images/Hot Temaki sem Arroz.jpg",
     rating: 5.0,
     prepTime: "10-15 min",
     ingredients: ["Nori", "Salmão em Cubos", "Cebolinha Verde", "Gergelim", "Molho Tarê"],

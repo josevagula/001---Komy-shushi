@@ -47,6 +47,7 @@ export default function App() {
       'hot-1': '/images/Hot Holl.jpg',
       'hot-6': '/images/Hot Temaki.jpg',
       'hot-7': '/images/Hot Temaki sem Arroz.jpg',
+      'temaki-2': '/images/Hot Temaki sem Arroz.jpg',
     };
     return migrated.map(p =>
       imageFix[p.id] ? { ...p, image: imageFix[p.id] } : p
