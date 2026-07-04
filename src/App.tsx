@@ -186,10 +186,36 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [selectedProduct, isCartOpen, isCheckoutView, currentOrder]);
 
+  // Helper to get current Brazil time
+  const getBrazilTime = (): Date => {
+    const now = new Date();
+    try {
+      const tzString = now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+      return new Date(tzString);
+    } catch (e) {
+      return now;
+    }
+  };
+
   // Helper to check if the store is open based strictly on schedule
-  // Open 24/7 every day
+  // Open Monday, Wednesday, Thursday, Friday from 17:00 to 22:00
   const isStoreOpenBySchedule = (): { isOpen: boolean; reason: string } => {
-    return { isOpen: true, reason: "" };
+    const now = getBrazilTime();
+    const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const hours = now.getHours();
+
+    const openDays = [1, 3, 4, 5]; // Mon, Wed, Thu, Fri
+    const isCorrectDay = openDays.includes(day);
+    const isCorrectTime = hours >= 17 && hours < 22; // 17:00 to 21:59:59
+
+    if (isCorrectDay && isCorrectTime) {
+      return { isOpen: true, reason: "" };
+    }
+
+    return { 
+      isOpen: false, 
+      reason: "Fechado • Abre Seg, Qua, Qui e Sex das 17h às 22h" 
+    };
   };
 
   const scheduleStatus = isStoreOpenBySchedule();
