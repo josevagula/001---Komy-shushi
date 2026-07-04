@@ -17,7 +17,7 @@ export const initialRestaurantConfig: RestaurantConfig = {
   deliveryFee: 0.00,
   freeShippingThresh: 0,
   isOpen: true,
-  whatsappNumber: "554396787495"
+  whatsappNumber: "554396019603"
 };
 
 // Standard toppings available across various products

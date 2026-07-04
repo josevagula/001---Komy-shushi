@@ -85,7 +85,7 @@ export default function App() {
     const saved = localStorage.getItem('komy-sushi-config');
     const parsed = saved ? JSON.parse(saved) : initialRestaurantConfig;
     if (parsed) {
-      parsed.whatsappNumber = "554396787495";
+      parsed.whatsappNumber = "554396019603";
     }
     return parsed;
   });
