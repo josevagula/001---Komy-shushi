@@ -237,7 +237,9 @@ export default function CustomizationModal({ product, editItem, isOpen, onClose,
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200 uppercase tracking-wide flex items-center gap-1.5 mb-2">
               <ClipboardList className="w-4 h-4 text-amber-500" />
-              Observações Especiais
+              {product.categories?.includes('Combos')
+                ? 'Observações Especiais (Não Fazemos Troca de Peças)'
+                : 'Observações Especiais'}
             </h4>
             <textarea
               value={specialInstructions}
