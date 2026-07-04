@@ -74,7 +74,7 @@ export default function App() {
       'bebida-5': '/images/Sprite lata.jpg',
       'bebida-7': '/images/Coca 2 litros.jpg',
       'bebida-8': '/images/Coca 2 litros zero.jpg',
-      'sushi-8': '/images/Uramaki philadefia.jpg',
+      'sushi-8': '/images/uramaki-philadelfia.jpg',
     };
     return migrated.map(p =>
       imageFix[p.id] ? { ...p, image: imageFix[p.id] } : p

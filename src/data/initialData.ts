@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -396,7 +396,7 @@ export const initialProducts: Product[] = [
     description: "Arroz, nori, salmão, cream cheese",
     price: 37.99,
     categories: ["Sushis"],
-    image: "/images/Uramaki philadefia.jpg",
+    image: "/images/uramaki-philadelfia.jpg",
     rating: 5.0,
     prepTime: "15-20 min",
     isBestSeller: true,
