@@ -232,7 +232,6 @@ export default function CartDrawer({
                     <AlertCircle className="w-4 h-4 shrink-0 text-red-500 animate-pulse" />
                     Restaurante Fechado no Momento
                   </div>
-                  <span className="font-medium text-zinc-500 dark:text-zinc-400">Aberto 24h todos os dias.</span>
                 </div>
               ) : null}
 
