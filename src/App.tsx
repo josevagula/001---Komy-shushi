@@ -54,12 +54,12 @@ export default function App() {
       'temaki-2': '/images/Temaki sem arroz.jpg',
       'temaki-3': '/images/Temaki skin.jpg',
       'hot-4': '/images/Hot batata crisp.png',
-      'sashimi-1': '/images/4 Laminas de Salmão.png',
-      'sashimi-2': '/images/6 Laminas de Salmão.png',
-      'sashimi-3': '/images/8 Laminas de Salmão.png',
-      'sashimi-4': '/images/4 Laminas de Salmão maçaricado.png',
-      'sashimi-5': '/images/6 Laminas de Salmão maçaricado.png',
-      'sashimi-6': '/images/8 Laminas de Salmão maçaricado.png',
+      'sashimi-1': '/images/Salmão - 4 Peças.jpg',
+      'sashimi-2': '/images/Salmão - 6 Peças.jpg',
+      'sashimi-3': '/images/Salmão - 8 Peças.jpg',
+      'sashimi-4': '/images/Salmão  4 peças - maçaricado.jpg',
+      'sashimi-5': '/images/Salmão  6 peças - maçaricado.jpg',
+      'sashimi-6': '/images/Salmão  8 peças - maçaricado.jpg',
       'comb-3': '/images/Combinado 3.jpg',
       'comb-4': '/images/Combinado 4.jpg',
       'combo-3': '/images/Combo 3.jpg',
@@ -74,6 +74,7 @@ export default function App() {
       'bebida-5': '/images/Sprite lata.jpg',
       'bebida-7': '/images/Coca 2 litros.jpg',
       'bebida-8': '/images/Coca 2 litros zero.jpg',
+      'sushi-8': '/images/Uramaki philadefia.jpg',
     };
     return migrated.map(p =>
       imageFix[p.id] ? { ...p, image: imageFix[p.id] } : p
